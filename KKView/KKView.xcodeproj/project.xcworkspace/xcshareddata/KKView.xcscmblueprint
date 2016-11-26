@@ -1,0 +1,30 @@
+{
+  "DVTSourceControlWorkspaceBlueprintPrimaryRemoteRepositoryKey" : "96E342C3EA94C9CEEEA999E008F69B95712CB664",
+  "DVTSourceControlWorkspaceBlueprintWorkingCopyRepositoryLocationsKey" : {
+
+  },
+  "DVTSourceControlWorkspaceBlueprintWorkingCopyStatesKey" : {
+    "96E342C3EA94C9CEEEA999E008F69B95712CB664" : 9223372036854775807,
+    "3E2B9ABBA3EF135D5B3703F9BE1B3971659DC813" : 9223372036854775807
+  },
+  "DVTSourceControlWorkspaceBlueprintIdentifierKey" : "417891EA-7C00-4071-89D9-A1886E805C3C",
+  "DVTSourceControlWorkspaceBlueprintWorkingCopyPathsKey" : {
+    "96E342C3EA94C9CEEEA999E008F69B95712CB664" : "kk-ios-view\/",
+    "3E2B9ABBA3EF135D5B3703F9BE1B3971659DC813" : "kk-ios-observer\/"
+  },
+  "DVTSourceControlWorkspaceBlueprintNameKey" : "KKView",
+  "DVTSourceControlWorkspaceBlueprintVersion" : 204,
+  "DVTSourceControlWorkspaceBlueprintRelativePathToProjectKey" : "KKView\/KKView.xcodeproj",
+  "DVTSourceControlWorkspaceBlueprintRemoteRepositoriesKey" : [
+    {
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey" : "https:\/\/github.com\/kkserver\/kk-ios-observer.git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey" : "com.apple.dt.Xcode.sourcecontrol.Git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey" : "3E2B9ABBA3EF135D5B3703F9BE1B3971659DC813"
+    },
+    {
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey" : "https:\/\/github.com\/kkserver\/kk-ios-view.git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey" : "com.apple.dt.Xcode.sourcecontrol.Git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey" : "96E342C3EA94C9CEEEA999E008F69B95712CB664"
+    }
+  ]
+}
