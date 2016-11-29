@@ -8,7 +8,7 @@
 
 import Foundation
 
-public class KKAnimationElement : KKElement {
+open class KKAnimationElement : KKElement {
     
     public func setAnimation(animation:CAAnimation) ->Void {
         

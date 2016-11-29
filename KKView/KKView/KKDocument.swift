@@ -24,7 +24,7 @@ public extension KKElement {
 }
 
 
-public class KKDocument: KKElement,KKViewElementProtocol,KKLayerElementProtocol,XMLParserDelegate {
+open class KKDocument: KKElement,KKViewElementProtocol,KKLayerElementProtocol,XMLParserDelegate {
     
     private var _styleSheet:KKStyleSheet?
     private var _body:KKElement?
@@ -92,10 +92,22 @@ public class KKDocument: KKElement,KKViewElementProtocol,KKLayerElementProtocol,
     }
     
     internal func onInit() ->Void {
+        set(KKProperty.Layout,"relative");
+        set(KKProperty.Width,"100%");
+        set(KKProperty.Height,"100%");
     }
+    
+    override internal func onPropertyChanged(_ property:KKProperty,_ value:Any?,_ newValue:Any?) {
+        if(_view != nil) {
+            _view!.KKElementSetProperty(self, property, value, newValue)
+        }
+        super.onPropertyChanged(property, value, newValue)
+    }
+
     
     public func loadXML(parser:XMLParser) ->Void {
         parser.delegate = self
+        parser.parse()
     }
     
     public func loadXML(data:Data) ->Void {
@@ -143,7 +155,7 @@ public class KKDocument: KKElement,KKViewElementProtocol,KKLayerElementProtocol,
     
     public func parserDidStartDocument(_ parser: XMLParser) {
         removeAllChildren()
-        _element = self
+        _element = nil
         _body = nil
         _text = nil
         _animations = Dictionary.init()
@@ -159,22 +171,28 @@ public class KKDocument: KKElement,KKViewElementProtocol,KKLayerElementProtocol,
    
     public func parser(_ parser: XMLParser, didStartElement elementName: String, namespaceURI: String?, qualifiedName qName: String?, attributes attributeDict: [String : String] = [:]) {
         
-        let e = styleSheet!.newElement(_element, qName!)
+        var e:KKElement
         
-        e.appendTo(_element!)
-        
+        if(_element == nil) {
+            e = self
+        }
+        else {
+            e = styleSheet!.newElement(_element, elementName)
+            e.appendTo(_element!)
+        }
+       
         for (key,value) in attributeDict {
             KKStyle.set(element: e, key, value)
         }
         
-        if(_element == self && qName == "body") {
+        if(_body == nil && elementName == "body") {
             _body = e
         }
         
         _element = e
         _text = nil
         
-        onStartElement(_element!,qName!)
+        onStartElement(_element!,elementName)
         
     }
     
@@ -186,7 +204,7 @@ public class KKDocument: KKElement,KKViewElementProtocol,KKLayerElementProtocol,
             _text = nil
         }
         
-        onEndElement(_element!,qName!)
+        onEndElement(_element!,elementName)
         
         _element = _element!.parent
     }

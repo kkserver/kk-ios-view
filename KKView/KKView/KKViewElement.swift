@@ -8,7 +8,7 @@
 
 import UIKit
 
-public class KKViewElement: KKElement,KKViewElementProtocol , KKLayerElementProtocol{
+open class KKViewElement: KKElement,KKViewElementProtocol , KKLayerElementProtocol{
     
     private let _view:UIView;
     
@@ -91,7 +91,7 @@ public class KKViewElement: KKElement,KKViewElementProtocol , KKLayerElementProt
 
 public extension UIView {
     
-    public func KKElementSetProperty(_ element:KKViewElement,_ property:KKProperty,_ value:Any?,_ newValue:Any?) -> Void {
+    public func KKElementSetProperty(_ element:KKViewElementProtocol,_ property:KKProperty,_ value:Any?,_ newValue:Any?) -> Void {
         
         let view = element.view;
         
@@ -191,7 +191,7 @@ public extension UIView {
             if(newValue == nil) {
                 view.layer.removeAllAnimations()
             } else {
-                let doc = element.document
+                let doc = (element as! KKElement).document
                 if(doc != nil){
                     let anim = doc!.getAnimation(newValue as! String)
                     if anim != nil {

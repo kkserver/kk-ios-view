@@ -29,7 +29,6 @@
 		ACCDE4361DE973F100E6C255 /* KKViewElementProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = ACCDE4351DE973F100E6C255 /* KKViewElementProtocol.swift */; };
 		ACCDE4381DE97BE800E6C255 /* KKDocument.swift in Sources */ = {isa = PBXBuildFile; fileRef = ACCDE4371DE97BE800E6C255 /* KKDocument.swift */; };
 		ACCDE43C1DE9890400E6C255 /* KKAnimationElement.swift in Sources */ = {isa = PBXBuildFile; fileRef = ACCDE43B1DE9890400E6C255 /* KKAnimationElement.swift */; };
-		ACCDE43E1DE98DC900E6C255 /* KKViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = ACCDE43D1DE98DC900E6C255 /* KKViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -75,7 +74,6 @@
 		ACCDE4351DE973F100E6C255 /* KKViewElementProtocol.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KKViewElementProtocol.swift; sourceTree = "<group>"; };
 		ACCDE4371DE97BE800E6C255 /* KKDocument.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KKDocument.swift; sourceTree = "<group>"; };
 		ACCDE43B1DE9890400E6C255 /* KKAnimationElement.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KKAnimationElement.swift; sourceTree = "<group>"; };
-		ACCDE43D1DE98DC900E6C255 /* KKViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KKViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -141,7 +139,6 @@
 				ACCDE4351DE973F100E6C255 /* KKViewElementProtocol.swift */,
 				ACCDE4371DE97BE800E6C255 /* KKDocument.swift */,
 				ACCDE43B1DE9890400E6C255 /* KKAnimationElement.swift */,
-				ACCDE43D1DE98DC900E6C255 /* KKViewController.swift */,
 			);
 			path = KKView;
 			sourceTree = "<group>";
@@ -259,7 +256,6 @@
 				ACB7F3AB1DDAE9C90098B7B9 /* KKStyle.swift in Sources */,
 				ACCD872A1DB4949700C2E792 /* KKEvent.swift in Sources */,
 				ACB7F39D1DDACC060098B7B9 /* KKProperty.swift in Sources */,
-				ACCDE43E1DE98DC900E6C255 /* KKViewController.swift in Sources */,
 				ACBD8EFE1DDBFC4400445053 /* KKCanvasElement.swift in Sources */,
 				ACCDE4381DE97BE800E6C255 /* KKDocument.swift in Sources */,
 				ACB7F3A91DDAD13C0098B7B9 /* KKEdge.swift in Sources */,
@@ -396,10 +392,7 @@
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
-				FRAMEWORK_SEARCH_PATHS = (
-					"~/Library/Frameworks",
-					"$(USER_LIBRARY_DIR)/Frameworks",
-				);
+				FRAMEWORK_SEARCH_PATHS = "$(USER_LIBRARY_DIR)/Frameworks";
 				INFOPLIST_FILE = KKView/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
@@ -422,10 +415,7 @@
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
-				FRAMEWORK_SEARCH_PATHS = (
-					"~/Library/Frameworks",
-					"$(USER_LIBRARY_DIR)/Frameworks",
-				);
+				FRAMEWORK_SEARCH_PATHS = "$(USER_LIBRARY_DIR)/Frameworks";
 				INFOPLIST_FILE = KKView/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;

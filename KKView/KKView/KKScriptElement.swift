@@ -8,48 +8,48 @@
 
 import UIKit
 
-public protocol KKScriptElementFunction : NSObjectProtocol {
+@objc public protocol KKScriptElementFunction : NSObjectProtocol {
     
-    func invoke(_ object:Any?) -> Any? ;
-    
-}
-
-
-public protocol KKScriptElementRunnable : NSObjectProtocol {
-    
-    func compile(_ code:String) -> KKScriptElementFunction?;
+    func invoke(object:AnyObject?) -> AnyObject?
     
 }
 
 
-public class KKScriptElement: KKElement {
+@objc public protocol KKScriptElementRunnable : NSObjectProtocol {
+    
+    func compile(code:NSString) -> KKScriptElementFunction?
+    
+}
 
-    private static var _Runnables:Dictionary<String,KKScriptElementRunnable> = Dictionary.init();
+@objc public protocol KKScriptContext : NSObjectProtocol {
     
-    public static func use(_ type:String, _ runnable:KKScriptElementRunnable) {
-        _Runnables[type] = runnable;
-    }
+    func useScriptRunnable(type:String) -> KKScriptElementRunnable?
     
-    public static func runScriptElement(_ element:KKElement) ->Void {
+}
+
+
+open class KKScriptElement: KKElement {
+
+    public static func runScriptElement(_ element:KKElement,_ context:KKScriptContext) ->Void {
         
         if element is KKScriptElement {
-            (element as! KKScriptElement).runScript();
+            (element as! KKScriptElement).runScript(context);
         } else {
             
             var p = element.firstChild;
             
             while(p != nil) {
-                KKScriptElement.runScriptElement(p!);
+                KKScriptElement.runScriptElement(p!,context);
                 p = p!.nextSibling;
             }
             
         }
     }
     
-    public func runScript() ->Void {
+    public func runScript(_ context:KKScriptContext) ->Void {
         
         let type = get(KKProperty.TType, defaultValue: "")
-        let runnable = KKScriptElement._Runnables[type]
+        let runnable = context.useScriptRunnable(type: type)
         
         if(runnable != nil) {
             onRunScript(runnable!)
@@ -62,9 +62,9 @@ public class KKScriptElement: KKElement {
         let text = get(KKProperty.Text, defaultValue: "")
         
         if(text != "") {
-            let fn = runnable.compile(text);
+            let fn = runnable.compile(code: text as NSString);
             if fn != nil {
-                _ = fn!.invoke(self);
+                _ = fn!.invoke(object:self);
             }
         }
         

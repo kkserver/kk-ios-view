@@ -15,13 +15,19 @@ public enum VerticalAlignment : Int {
     case bottom;
 }
 
-public struct KKProperty : Hashable {
+public class KKProperty : Hashable {
     
     public typealias Function = (KKProperty,Any?)->Any?
 
     public let name:String;
     public let function:Function;
     public let virtual:Bool;
+    
+    public init(name:String,function:@escaping Function,virtual:Bool) {
+        self.name = name
+        self.function = function
+        self.virtual = virtual
+    }
     
     public static let ObjectFunction = {(property:KKProperty,value:Any?)->Any? in
         return value;
@@ -667,5 +673,5 @@ public struct KKProperty : Hashable {
     
     public static let ContentSize:KKProperty = KKProperty.init(name: "contentSize", function: KKProperty.KKLayoutFunction, virtual: false);
     
-    public static let Layout:KKProperty = KKProperty.init(name: "layout", function: KKProperty.CGSizeFunction, virtual: false);
+    public static let Layout:KKProperty = KKProperty.init(name: "layout", function: KKProperty.KKLayoutFunction, virtual: false);
 }

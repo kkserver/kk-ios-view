@@ -8,11 +8,11 @@
 
 import Foundation
 
-public class KKEvent : NSObject {
+open class KKEvent : NSObject {
     
 }
 
-public class KKEventEmitter : NSObject {
+open class KKEventEmitter : NSObject {
     
     public typealias Function = (String,KKEvent,AnyObject?)->Void
     

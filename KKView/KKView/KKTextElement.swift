@@ -8,7 +8,7 @@
 
 import Foundation
 
-public class KKTextElement :KKCanvasElement {
+open class KKTextElement :KKCanvasElement {
     
 }
 

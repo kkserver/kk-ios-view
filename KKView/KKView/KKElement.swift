@@ -9,7 +9,7 @@
 import Foundation
 import KKObserver
 
-public class KKElementEvent : KKEvent {
+open class KKElementEvent : KKEvent {
     
     public var cancelBubble:Bool=false
     public let element:KKElement
@@ -21,7 +21,7 @@ public class KKElementEvent : KKEvent {
     
 }
 
-public class KKElement : KKEventEmitter,NSCopying {
+open class KKElement : KKEventEmitter,NSCopying {
     
     private weak var _parent:KKElement? = nil
     private var _firstChild:KKElement? = nil
@@ -417,14 +417,15 @@ public class KKElement : KKEventEmitter,NSCopying {
     }
     
     public func set(_ property:KKProperty,_ value:Any?) -> Void {
+        let newValue = property.function(property, value)
         let v:Any? = _values[property];
-        if(value == nil) {
+        if(newValue == nil) {
             _values.removeValue(forKey: property);
         }
         else {
-            _values[property] = value!;
+            _values[property] = newValue!;
         }
-        onPropertyChanged(property,v,value);
+        onPropertyChanged(property,v,newValue);
     }
     
     public func change(_ property:KKProperty) -> Void {

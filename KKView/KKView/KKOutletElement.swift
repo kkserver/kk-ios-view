@@ -17,7 +17,7 @@ public extension KKElement {
     
 }
 
-public class KKOutletElement: KKScriptElement {
+open class KKOutletElement: KKScriptElement {
 
     public static let Done:NSObject = NSObject.init()
     
@@ -28,7 +28,7 @@ public class KKOutletElement: KKScriptElement {
         let text = get(KKProperty.Text, defaultValue: "")
         
         if(text != "") {
-            _fn = runnable.compile(text);
+            _fn = runnable.compile(code: text as NSString);
         }
 
     }
@@ -68,7 +68,12 @@ public class KKOutletElement: KKScriptElement {
         var v = value;
         
         if(_fn != nil) {
-            v = _fn!.invoke(["value" : value,"element" :self,"observer" : observer,"changedKeys" : changedKeys])
+            let object = NSMutableDictionary.init(capacity: 4)
+            object["value"] = value
+            object["element"] = self
+            object["observer"] = observer
+            object["changedKeys"] = changedKeys
+            v = _fn!.invoke(object: object)
         }
         
         if(v != nil && v is NSObject && (v as! NSObject) == KKOutletElement.Done) {

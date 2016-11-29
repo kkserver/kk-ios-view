@@ -9,7 +9,7 @@
 import Foundation
 
 
-public class KKStyle : NSObject{
+open class KKStyle : NSObject{
     
     private static var _PropertyDictionary:Dictionary<String,KKProperty> = Dictionary.init();
     

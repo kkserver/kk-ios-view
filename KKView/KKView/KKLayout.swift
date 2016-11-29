@@ -31,7 +31,7 @@ public extension KKElement {
     
 }
 
-public class KKLayout {
+open class KKLayout {
     
     public func layout(_ element:KKElement,_ size:CGSize) -> Void {
         
@@ -140,7 +140,7 @@ public class KKLayout {
         return nil
     }
     
-    public class KKRelativeLayout : KKLayout {
+    open class KKRelativeLayout : KKLayout {
      
         override public func layoutChildren(_ element:KKElement) -> CGSize {
             var size:CGSize = CGSize.zero
@@ -225,7 +225,7 @@ public class KKLayout {
         
     }
     
-    public class KKFlowLayout : KKLayout {
+    open class KKFlowLayout : KKLayout {
         
         private let _nowarp:Bool
         

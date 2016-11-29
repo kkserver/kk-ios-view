@@ -8,7 +8,7 @@
 
 import Foundation
 
-public class KKCanvasElement : KKElement,CALayerDelegate,KKLayerElementProtocol {
+open class KKCanvasElement : KKElement,CALayerDelegate,KKLayerElementProtocol {
 
     private let _layer:CALayer;
     

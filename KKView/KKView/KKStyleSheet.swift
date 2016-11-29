@@ -8,7 +8,7 @@
 
 import Foundation
 
-public class KKStyleSheet : NSObject {
+open class KKStyleSheet : NSObject {
     
     private var _styles:Dictionary<String,KKStyle> = Dictionary.init();
     
