@@ -42,7 +42,7 @@ open class KKStyle : NSObject{
     ];
     
     private var _propertys:Set<KKProperty> = Set.init();
-    private var _values:Dictionary<String,Dictionary<KKProperty,Any?>> = Dictionary.init()
+    private var _values:Dictionary<String,Dictionary<KKProperty,Any>> = Dictionary.init()
     
     public var propertys:Set<KKProperty> {
         get {
@@ -75,7 +75,7 @@ open class KKStyle : NSObject{
     
         _propertys.insert(property);
         
-        var vs:Dictionary<KKProperty,Any?>? = _values[status];
+        var vs:Dictionary<KKProperty,Any>? = _values[status];
         
         if(vs == nil) {
             vs = Dictionary.init();
@@ -87,10 +87,10 @@ open class KKStyle : NSObject{
     
     public func get(_ property:KKProperty,_ status:String) -> Any? {
         
-        let vs:Dictionary<KKProperty,Any?>? = _values[status];
+        let vs:Dictionary<KKProperty,Any>? = _values[status];
         
         if(vs != nil) {
-            return vs![property];
+            return vs![property] ;
         }
         
         return nil;
