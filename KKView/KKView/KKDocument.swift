@@ -28,8 +28,9 @@ open class KKDocument: KKElement,KKViewElementProtocol,KKLayerElementProtocol,XM
     
     private var _styleSheet:KKStyleSheet?
     private var _body:KKElement?
-    private weak var _view:UIView?;
+    private weak var _view:UIView?
     private var _animations:Dictionary<String,KKAnimationElement>?
+    public var bundle:Bundle?
     
     public var view:UIView {
         get {
@@ -144,7 +145,18 @@ open class KKDocument: KKElement,KKViewElementProtocol,KKLayerElementProtocol,XM
     internal func onEndElement(_ element:KKElement,_ name:String) ->Void {
         
         if(name == "style") {
-            _styleSheet?.load(cssContent: _element!.get(KKProperty.Text, defaultValue: ""))
+            let src = element.get(KKProperty.Src, defaultValue: "")
+            if src != "" {
+                if src.hasPrefix("/") {
+                    _styleSheet?.load(cssContent: try! String.init(contentsOfFile: src))
+                } else if bundle != nil {
+                    _styleSheet?.load(cssContent: try! String.init(contentsOfFile: (bundle?.resourcePath?.appendingFormat("/%@", src))!))
+                } else {
+                    _styleSheet?.load(cssContent: try! String.init(contentsOfFile: src))
+                }
+            } else {
+                _styleSheet?.load(cssContent: _element!.get(KKProperty.Text, defaultValue: ""))
+            }
         }
         
         if(_element is KKAnimationElement) {
