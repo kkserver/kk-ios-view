@@ -68,6 +68,7 @@ open class KKElement : KKEventEmitter,NSCopying {
         if _lastChild != nil {
             _lastChild!._nextSibling = e
             e._prevSibling = _lastChild
+            _lastChild = e
         } else {
             _firstChild = e
             _lastChild = e
