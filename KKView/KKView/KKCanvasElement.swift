@@ -21,19 +21,16 @@ open class KKCanvasElement : KKElement,CALayerDelegate,KKLayerElementProtocol {
     public init(layer:CALayer) {
         _layer = layer
         super.init()
-        onInit();
     }
     
     public required init() {
         _layer = CALayer.init()
         super.init()
-        onInit()
     }
     
     public required init(element: KKElement) {
         _layer = type(of: (element as! KKLayerElementProtocol).layer).init();
         super.init(element: element);
-        onInit()
     }
     
     public required init(name: String) {
@@ -51,10 +48,10 @@ open class KKCanvasElement : KKElement,CALayerDelegate,KKLayerElementProtocol {
             _layer = (clazz! as! CALayer.Type).init();
         }
         super.init()
-        onInit()
     }
     
-    internal func onInit() ->Void {
+    internal override func onInit() ->Void {
+        super.onInit()
         _layer.delegate = self
     }
     

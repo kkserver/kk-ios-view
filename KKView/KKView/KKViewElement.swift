@@ -10,6 +10,10 @@ import UIKit
 
 open class KKViewElement: KKElement,KKViewElementProtocol , KKLayerElementProtocol{
     
+    public class func defaultView() -> UIView {
+        return UIView.init(frame: CGRect.zero)
+    }
+    
     private let _view:UIView;
     
     public var view:UIView {
@@ -27,19 +31,16 @@ open class KKViewElement: KKElement,KKViewElementProtocol , KKLayerElementProtoc
     public init(view:UIView) {
         _view = view
         super.init()
-        onInit();
     }
     
     public required init() {
         _view = UIView.init(frame: CGRect.zero)
         super.init()
-        onInit()
     }
     
     public required init(element: KKElement) {
         _view = type(of: (element as! KKViewElementProtocol).view).init(frame: CGRect.zero);
         super.init(element:element)
-        onInit()
     }
     
     public required init(name: String) {
@@ -51,17 +52,18 @@ open class KKViewElement: KKElement,KKViewElementProtocol , KKLayerElementProtoc
         }
         
         if(clazz == nil) {
-            _view = UIView.init(frame:CGRect.zero)
+            _view = type(of: self).defaultView()
         }
         else {
             _view = (clazz! as! UIView.Type).init(frame:CGRect.zero);
         }
         
         super.init()
-        onInit()
     }
     
-    internal func onInit() ->Void {
+    internal override func onInit() ->Void {
+        super.onInit()
+        set(KKProperty.Layout,"relative");
     }
     
     override public func onAddToParent(_ element:KKElement) {

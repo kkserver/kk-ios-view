@@ -328,6 +328,28 @@ public class KKProperty : Hashable {
         return nil;
     };
     
+    public static let CGPointFunction = {(property:KKProperty,value:Any?)->Any? in
+        
+        if(value == nil) {
+            return nil;
+        }
+        
+        if(value is CGPoint) {
+            return value as! CGPoint;
+        }
+        
+        if(value is String || value is NSString) {
+            
+            let v:String = value as! String;
+            
+            return CGPointFromString(v);
+        }
+        
+        
+        return nil;
+    };
+
+    
     public static let CGRectFunction = {(property:KKProperty,value:Any?)->Any? in
         
         if(value == nil) {
@@ -613,6 +635,8 @@ public class KKProperty : Hashable {
     
     public static let Reuse:KKProperty = KKProperty.init(name: "reuse", function: KKProperty.StringFunction, virtual: false);
     
+    public static let ReuseKey:KKProperty = KKProperty.init(name: "reuse-key", function: KKProperty.StringFunction, virtual: false);
+    
     public static let Class:KKProperty = KKProperty.init(name: "class", function: KKProperty.ClassFunction, virtual: false);
     
     public static let Src:KKProperty = KKProperty.init(name: "src", function: KKProperty.StringFunction, virtual: false);
@@ -671,7 +695,9 @@ public class KKProperty : Hashable {
     
     public static let Frame:KKProperty = KKProperty.init(name: "frame", function: KKProperty.CGRectFunction, virtual: false);
     
-    public static let ContentSize:KKProperty = KKProperty.init(name: "contentSize", function: KKProperty.KKLayoutFunction, virtual: false);
+    public static let ContentSize:KKProperty = KKProperty.init(name: "contentSize", function: KKProperty.CGSizeFunction, virtual: false);
+    
+     public static let ContentOffset:KKProperty = KKProperty.init(name: "contentOffset", function: KKProperty.CGPointFunction, virtual: false);
     
     public static let Layout:KKProperty = KKProperty.init(name: "layout", function: KKProperty.KKLayoutFunction, virtual: false);
 }

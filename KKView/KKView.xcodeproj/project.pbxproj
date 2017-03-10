@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		AC7F32761E7267E600868EE8 /* KKObserver.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AC7F32751E7267E600868EE8 /* KKObserver.framework */; };
 		ACB7F39D1DDACC060098B7B9 /* KKProperty.swift in Sources */ = {isa = PBXBuildFile; fileRef = ACB7F39C1DDACC060098B7B9 /* KKProperty.swift */; };
 		ACB7F39F1DDACC3E0098B7B9 /* KKValue.swift in Sources */ = {isa = PBXBuildFile; fileRef = ACB7F39E1DDACC3E0098B7B9 /* KKValue.swift */; };
 		ACB7F3A91DDAD13C0098B7B9 /* KKEdge.swift in Sources */ = {isa = PBXBuildFile; fileRef = ACB7F3A81DDAD13B0098B7B9 /* KKEdge.swift */; };
@@ -20,7 +21,6 @@
 		ACBD8F021DDC044E00445053 /* KKSize.swift in Sources */ = {isa = PBXBuildFile; fileRef = ACBD8F011DDC044E00445053 /* KKSize.swift */; };
 		ACBD8F041DDC04B500445053 /* KKLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = ACBD8F031DDC04B500445053 /* KKLayout.swift */; };
 		ACCD871E1DB4768900C2E792 /* KKView.h in Headers */ = {isa = PBXBuildFile; fileRef = ACCD871C1DB4768900C2E792 /* KKView.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		ACCD87281DB4943600C2E792 /* KKObserver.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = ACCD87271DB4943600C2E792 /* KKObserver.framework */; };
 		ACCD872A1DB4949700C2E792 /* KKEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = ACCD87291DB4949700C2E792 /* KKEvent.swift */; };
 		ACCD872C1DB4982C00C2E792 /* KKElement.swift in Sources */ = {isa = PBXBuildFile; fileRef = ACCD872B1DB4982C00C2E792 /* KKElement.swift */; };
 		ACCDE4301DE96A4C00E6C255 /* KKScriptElement.swift in Sources */ = {isa = PBXBuildFile; fileRef = ACCDE42F1DE96A4C00E6C255 /* KKScriptElement.swift */; };
@@ -29,9 +29,11 @@
 		ACCDE4361DE973F100E6C255 /* KKViewElementProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = ACCDE4351DE973F100E6C255 /* KKViewElementProtocol.swift */; };
 		ACCDE4381DE97BE800E6C255 /* KKDocument.swift in Sources */ = {isa = PBXBuildFile; fileRef = ACCDE4371DE97BE800E6C255 /* KKDocument.swift */; };
 		ACCDE43C1DE9890400E6C255 /* KKAnimationElement.swift in Sources */ = {isa = PBXBuildFile; fileRef = ACCDE43B1DE9890400E6C255 /* KKAnimationElement.swift */; };
+		ACEA56241E71558C002DF69F /* KKContainerViewElement.swift in Sources */ = {isa = PBXBuildFile; fileRef = ACEA56231E71558C002DF69F /* KKContainerViewElement.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		AC7F32751E7267E600868EE8 /* KKObserver.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = KKObserver.framework; path = ../../../../../../../Frameworks/KKObserver.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		ACB7F39C1DDACC060098B7B9 /* KKProperty.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KKProperty.swift; sourceTree = "<group>"; };
 		ACB7F39E1DDACC3E0098B7B9 /* KKValue.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KKValue.swift; sourceTree = "<group>"; };
 		ACB7F3A81DDAD13B0098B7B9 /* KKEdge.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KKEdge.swift; sourceTree = "<group>"; };
@@ -47,7 +49,6 @@
 		ACCD87191DB4768900C2E792 /* KKView.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = KKView.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		ACCD871C1DB4768900C2E792 /* KKView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = KKView.h; sourceTree = "<group>"; };
 		ACCD871D1DB4768900C2E792 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		ACCD87271DB4943600C2E792 /* KKObserver.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = KKObserver.framework; path = ../../../../../../Library/Frameworks/KKObserver.framework; sourceTree = "<group>"; };
 		ACCD87291DB4949700C2E792 /* KKEvent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KKEvent.swift; sourceTree = "<group>"; };
 		ACCD872B1DB4982C00C2E792 /* KKElement.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KKElement.swift; sourceTree = "<group>"; };
 		ACCDE42F1DE96A4C00E6C255 /* KKScriptElement.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KKScriptElement.swift; sourceTree = "<group>"; };
@@ -56,6 +57,7 @@
 		ACCDE4351DE973F100E6C255 /* KKViewElementProtocol.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KKViewElementProtocol.swift; sourceTree = "<group>"; };
 		ACCDE4371DE97BE800E6C255 /* KKDocument.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KKDocument.swift; sourceTree = "<group>"; };
 		ACCDE43B1DE9890400E6C255 /* KKAnimationElement.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KKAnimationElement.swift; sourceTree = "<group>"; };
+		ACEA56231E71558C002DF69F /* KKContainerViewElement.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KKContainerViewElement.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -63,7 +65,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				ACCD87281DB4943600C2E792 /* KKObserver.framework in Frameworks */,
+				AC7F32761E7267E600868EE8 /* KKObserver.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -112,6 +114,7 @@
 				ACCDE4351DE973F100E6C255 /* KKViewElementProtocol.swift */,
 				ACCDE4371DE97BE800E6C255 /* KKDocument.swift */,
 				ACCDE43B1DE9890400E6C255 /* KKAnimationElement.swift */,
+				ACEA56231E71558C002DF69F /* KKContainerViewElement.swift */,
 			);
 			path = KKView;
 			sourceTree = "<group>";
@@ -119,7 +122,7 @@
 		ACCD87241DB48F2900C2E792 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				ACCD87271DB4943600C2E792 /* KKObserver.framework */,
+				AC7F32751E7267E600868EE8 /* KKObserver.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -211,6 +214,7 @@
 				ACCDE43C1DE9890400E6C255 /* KKAnimationElement.swift in Sources */,
 				ACB7F3AB1DDAE9C90098B7B9 /* KKStyle.swift in Sources */,
 				ACCD872A1DB4949700C2E792 /* KKEvent.swift in Sources */,
+				ACEA56241E71558C002DF69F /* KKContainerViewElement.swift in Sources */,
 				ACB7F39D1DDACC060098B7B9 /* KKProperty.swift in Sources */,
 				ACBD8EFE1DDBFC4400445053 /* KKCanvasElement.swift in Sources */,
 				ACCDE4381DE97BE800E6C255 /* KKDocument.swift in Sources */,
@@ -347,6 +351,7 @@
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				ONLY_ACTIVE_ARCH = NO;
 				PRODUCT_BUNDLE_IDENTIFIER = cn.kkserver.KKView;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;

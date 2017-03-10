@@ -59,18 +59,15 @@ open class KKDocument: KKElement,KKViewElementProtocol,KKLayerElementProtocol,XM
     public init(view:UIView) {
         _view = view;
         super.init()
-        onInit();
     }
     
     public required init() {
         super.init()
-        onInit()
     }
     
     public required init(element: KKElement) {
         _view = type(of: (element as! KKViewElementProtocol).view).init(frame: CGRect.zero);
         super.init(element:element)
-        onInit()
     }
     
     public required init(name: String) {
@@ -89,11 +86,10 @@ open class KKDocument: KKElement,KKViewElementProtocol,KKLayerElementProtocol,XM
         }
         
         super.init()
-        onInit()
     }
     
-    internal func onInit() ->Void {
-        set(KKProperty.Layout,"relative");
+    internal override func onInit() ->Void {
+        super.onInit()
         set(KKProperty.Width,"100%");
         set(KKProperty.Height,"100%");
     }

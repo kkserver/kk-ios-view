@@ -17,7 +17,6 @@ public extension KKElement {
         if(v != nil) {
             v!.layout(self, size);
         }
-        
     }
     
     public func layoutChildren() -> Void {
@@ -166,21 +165,19 @@ open class KKLayout {
             size.width = paddingLeft + paddingRight
             size.height = paddingTop + paddingBottom
             
-            var p = element.firstChild
-            
-            while(p != nil) {
-                
-                let layout = p!.get(KKProperty.Layout) as! KKLayout?
+            for p in element {
+              
+                let layout = p.get(KKProperty.Layout) as! KKLayout?
                 
                 if(layout != nil) {
                     
-                    layout!.layout(p!, inSize)
+                    layout!.layout(p, inSize)
                     
-                    var r = p!.get(KKProperty.Frame, defaultValue: CGRect.zero)
-                    let left = p!.get(KKProperty.Left, defaultValue: KKValue.Zero)
-                    let right = p!.get(KKProperty.Right, defaultValue: KKValue.Zero)
-                    let top = p!.get(KKProperty.Top, defaultValue: KKValue.Zero)
-                    let bottom = p!.get(KKProperty.Bottom, defaultValue: KKValue.Zero)
+                    var r = p.get(KKProperty.Frame, defaultValue: CGRect.zero)
+                    let left = p.get(KKProperty.Left, defaultValue: KKValue.Zero)
+                    let right = p.get(KKProperty.Right, defaultValue: KKValue.Zero)
+                    let top = p.get(KKProperty.Top, defaultValue: KKValue.Zero)
+                    let bottom = p.get(KKProperty.Bottom, defaultValue: KKValue.Zero)
                     
                     if(left.isAuto()) {
                         if(right.isAuto()) {
@@ -211,11 +208,10 @@ open class KKLayout {
                         size.height = r.origin.y + r.size.height + paddingBottom
                     }
                     
-                    p!.set(KKProperty.Frame,r)
+                    p.set(KKProperty.Frame,r)
                     
                 }
                 
-                p = p!.nextSibling
             }
             
             element.set(KKProperty.ContentSize,size)
@@ -264,24 +260,22 @@ open class KKLayout {
                 maxWidth = v.floatValue(frame.size.width)
             }
         
-            var e = element.firstChild
-            
-            while(e != nil) {
+            for e in element {
                 
-                let layout = e!.get(KKProperty.Frame) as! KKLayout?
-                let hidden = e!.get(KKProperty.Hidden, defaultValue: false)
+                let layout = e.get(KKProperty.Frame) as! KKLayout?
+                let hidden = e.get(KKProperty.Hidden, defaultValue: false)
                 
                 if(layout != nil && !hidden) {
                     
-                    let margin = e!.get(KKProperty.Margin, defaultValue:KKEdge.Zero)
+                    let margin = e.get(KKProperty.Margin, defaultValue:KKEdge.Zero)
                     let marginLeft = margin.left.floatValue(inSize.width)
                     let marginTop = margin.top.floatValue(inSize.height)
                     let marginRight = margin.right.floatValue(inSize.width)
                     let marginBottom = margin.bottom.floatValue(inSize.height)
                     
-                    layout?.layout(e!, CGSize.init(width: inSize.width - marginLeft - marginRight, height: inSize.height - marginTop - marginBottom))
+                    layout?.layout(e, CGSize.init(width: inSize.width - marginLeft - marginRight, height: inSize.height - marginTop - marginBottom))
                     
-                    var r = e!.get(KKProperty.Frame, defaultValue:CGRect.zero)
+                    var r = e.get(KKProperty.Frame, defaultValue:CGRect.zero)
                     
                     if(_nowarp || (p.x + r.size.width + marginLeft + marginRight <= maxWidth - paddingRight)) {
                         r.origin.x = p.x + marginLeft
@@ -308,11 +302,10 @@ open class KKLayout {
                         }
                     }
                     
-                    e!.set(KKProperty.Frame,r)
+                    e.set(KKProperty.Frame,r)
                     
                 }
                 
-                e = e!.nextSibling
             }
             
             size.height = p.y + lineHeight + paddingBottom

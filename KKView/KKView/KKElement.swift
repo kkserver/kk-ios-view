@@ -21,13 +21,49 @@ open class KKElementEvent : KKEvent {
     
 }
 
-open class KKElement : KKEventEmitter,NSCopying {
+open class KKElementBaseIterator : IteratorProtocol {
+    
+    public typealias Element = KKElement
+    
+    public func next() -> Element? {
+        return nil
+    }
+}
+
+
+open class KKElementIterator : KKElementBaseIterator {
+    
+    public typealias Element = KKElement
+    
+    private var _element:Element?
+    
+    public init(element:Element?) {
+        super.init()
+        _element = element
+    }
+    
+    public override func next() -> Element? {
+        let v = _element
+        if _element != nil {
+            _element = _element!.nextSibling
+        }
+        return v
+    }
+}
+
+open class KKElement : KKEventEmitter,NSCopying , Sequence {
+    
+    public typealias Iterator = KKElementBaseIterator
     
     private weak var _parent:KKElement? = nil
     private var _firstChild:KKElement? = nil
     private var _lastChild:KKElement? = nil
     private var _nextSibling:KKElement? = nil
     private weak var _prevSibling:KKElement? = nil
+    
+    public func makeIterator() -> Iterator {
+        return KKElementIterator.init(element: _firstChild)
+    }
     
     public var parent:KKElement? {
         get {
@@ -238,14 +274,20 @@ open class KKElement : KKEventEmitter,NSCopying {
     
     public required override init() {
         super.init()
+        onInit()
     }
     
     public required init(element:KKElement) {
         super.init()
+        onInit()
     }
     
     public required init(name:String) {
         super.init()
+        onInit()
+    }
+    
+    internal func onInit() ->Void {
     }
     
     public func copyElement(with zone: NSZone? = nil) -> KKElement {
@@ -417,16 +459,23 @@ open class KKElement : KKEventEmitter,NSCopying {
         
     }
     
+    internal func onPropertyChanging(_ property:KKProperty,_ value:Any?,_ newValue:Any?) -> Bool {
+        
+        return true
+    }
+    
     public func set(_ property:KKProperty,_ value:Any?) -> Void {
         let newValue = property.function(property, value)
         let v:Any? = _values[property];
-        if(newValue == nil) {
-            _values.removeValue(forKey: property);
+        if(onPropertyChanging(property,v,newValue)) {
+            if(newValue == nil) {
+                _values.removeValue(forKey: property);
+            }
+            else {
+                _values[property] = newValue!;
+            }
+            onPropertyChanged(property,v,newValue);
         }
-        else {
-            _values[property] = newValue!;
-        }
-        onPropertyChanged(property,v,newValue);
     }
     
     public func change(_ property:KKProperty) -> Void {

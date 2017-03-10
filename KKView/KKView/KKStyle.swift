@@ -38,7 +38,8 @@ open class KKStyle : NSObject{
         KKProperty.LongAction,KKProperty.X,KKProperty.Y,KKProperty.ToX,KKProperty.ToY,KKProperty.Duration,KKProperty.Autoreverse,
         KKProperty.ReplayCount,KKProperty.AfterDelay,KKProperty.ToOpacity,KKProperty.Degrees,KKProperty.ToDegrees,
         KKProperty.Animation,KKProperty.Image,KKProperty.Text,KKProperty.Gravity,KKProperty.PageIndex,KKProperty.PageCount,
-        KKProperty.TintColor
+        KKProperty.TintColor,
+        KKProperty.ReuseKey
     ];
     
     private var _propertys:Set<KKProperty> = Set.init();
