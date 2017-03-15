@@ -9,7 +9,7 @@
 import UIKit
 import KKObserver
 
-open class KKContainerViewElement: KKViewElement {
+open class KKContainerViewElement: KKViewElement ,UIScrollViewDelegate{
 
     public class Item {
         public let keys:String
@@ -29,32 +29,36 @@ open class KKContainerViewElement: KKViewElement {
     
     public class Container : NSObject {
         
+        public var size:CGSize = CGSize.zero
         public var items = Array<Item>.init()
         public var cells = Dictionary<String,CellElement>.init()
         public var observer:KKObserver? = nil
-        public var elements = Dictionary<String,Array<ItemElement>>.init()
+        public var elements = NSMutableDictionary.init()
         
         public func enqueue(element:ItemElement) -> Void {
             let reuse = element.get(KKProperty.Reuse, defaultValue: "")
-            var vs = elements[reuse]
+            let vs = elements[reuse]
             if vs == nil {
-                elements[reuse] = [element]
+                elements[reuse] = NSMutableArray.init(object: element)
             } else {
-                vs!.append(element)
+                (vs as! NSMutableArray).add(element)
             }
         }
         
         public func dequeue(reuse:String) ->ItemElement {
-            let element = elements[reuse]?.popLast()
+            let vs = elements[reuse]
+            let element = (vs as! NSMutableArray?)?.lastObject
             if element == nil {
                 let cell = cells[reuse]
                 if cell != nil {
-                    return cell!.copy(with: nil) as! ItemElement
+                    return cell!.newElement(with: nil) as! ItemElement
                 } else {
                     return ItemElement.init()
                 }
+            } else {
+                (vs as! NSMutableArray?)?.removeLastObject()
             }
-            return element!
+            return element as! ItemElement
         }
     }
     
@@ -81,14 +85,22 @@ open class KKContainerViewElement: KKViewElement {
             super.init()
         }
         
-        public override func copyElement(with zone: NSZone? = nil) -> KKElement {
+        public func newElement(with zone: NSZone? = nil) -> KKElement {
             
             let v:KKElement = ItemElement.init(name:name)
             
-            for (key,value) in self.values {
-                if(!key.virtual) {
-                    v.set(key, value);
+            copyAttributes(v, with: zone)
+            
+            var p = firstChild;
+            
+            while(p != nil) {
+                if( p is ReflectElementProtocol) {
+                    
                 }
+                else {
+                    (p!.copy(with: zone) as! KKElement).appendTo(v);
+                }
+                p = p!.nextSibling
             }
             
             return v;
@@ -102,6 +114,10 @@ open class KKContainerViewElement: KKViewElement {
                 
                 if(v != nil && item != nil) {
                     item!.frame = v!
+                    if item!.element != nil {
+                        item!.element!.set(KKProperty.Frame, v!)
+                        item!.element!.layoutChildren()
+                    }
                 }
                 
             }
@@ -109,6 +125,10 @@ open class KKContainerViewElement: KKViewElement {
             super.onPropertyChanged(property, value, newValue);
         }
         
+        override internal func onInit() ->Void {
+            super.onInit()
+            set(KKProperty.Layout,"relative")
+        }
     }
 
     
@@ -130,10 +150,10 @@ open class KKContainerViewElement: KKViewElement {
             
             while(_i < _container.items.count) {
                 
-                _i = _i + 1
-                
                 let item = _container.items[_i]
                 let cell = _container.cells[item.reuse]
+                
+                _i = _i + 1
                 
                 if cell == nil {
                     continue
@@ -142,6 +162,7 @@ open class KKContainerViewElement: KKViewElement {
                 cell!.item = item
                 cell!.set(KKProperty.Key, item.keys)
                 cell!.set(KKProperty.Observer, _container.observer)
+                cell!.layout(_container.size)
                 
                 return cell
             }
@@ -173,6 +194,7 @@ open class KKContainerViewElement: KKViewElement {
     
     internal override func onInit() ->Void {
         super.onInit()
+        (self.view as! UIScrollView).delegate = self
         self.view.addObserver(self, forKeyPath: "contentOffset", options: NSKeyValueObservingOptions.new, context: nil)
     }
     
@@ -185,6 +207,20 @@ open class KKContainerViewElement: KKViewElement {
     
     public func reloadData() {
         
+        var p = firstChild
+        var n:KKElement?
+        
+        while p != nil {
+            if p is ItemElement {
+                container.enqueue(element: (p as! ItemElement?)!)
+                n = p!.nextSibling
+                p!.remove()
+                p = n
+            } else {
+                p = p!.nextSibling
+            }
+        }
+        
         container.items.removeAll()
         
         let v = get(KKProperty.WithObserver) as! KKWithObserver?
@@ -193,7 +229,7 @@ open class KKContainerViewElement: KKViewElement {
             
             container.observer = v
             
-            let reuseKey = get(KKProperty.ReuseKey, defaultValue: "")
+            let reuseKey = get(KKProperty.ReuseKey, defaultValue: "reuse")
             let reuseKeys:[String] = reuseKey == "" ? [] : reuseKey.components(separatedBy: ".")
             
             KKObject.forEach(v!.get([])) { (key, value) in
@@ -218,7 +254,8 @@ open class KKContainerViewElement: KKViewElement {
         if self.view is UIScrollView {
             f.origin = (self.view as! UIScrollView).contentOffset
         }
-        return frame.intersects(f)
+        let v = f.intersection(frame)
+        return v.size.width > 0 && v.size.height > 0
     }
     
     public func reloadElements() {
@@ -230,13 +267,16 @@ open class KKContainerViewElement: KKViewElement {
                 if item.element == nil {
                     item.element = container.dequeue(reuse: item.reuse)
                     item.element!.set(KKProperty.Frame, item.frame)
+                    item.element!.set(KKProperty.ContentOffset, item.offset)
+                    item.element!.set(KKProperty.Key,item.keys)
+                    item.element!.set(KKProperty.Observer,container.observer)
                     item.element!.layoutChildren()
-                    item.element!.set(KKProperty.ContentOffset, item.frame)
                     item.element!.appendTo(self)
                 }
                 
             } else if(item.element != nil) {
                 container.enqueue(element: item.element!)
+                item.element!.set(KKProperty.Observer,nil)
                 item.element!.remove()
                 item.element = nil
             }
@@ -252,34 +292,35 @@ open class KKContainerViewElement: KKViewElement {
     }
     
     override internal func onPropertyChanged(_ property:KKProperty,_ value:Any?,_ newValue:Any?) {
+        super.onPropertyChanged(property, value, newValue);
         
-        if(property == KKProperty.WithObserver) {
-            
-            let obs = newValue as! KKWithObserver?
-            
-            if(obs != nil) {
-                
-                reloadData()
-                
-                obs!.on([], { ( _ observer :KKObserver, _ changedKeys:[String], _ weakObject:AnyObject?) in
-                    
-                    if weakObject != nil {
-                        let v = weakObject! as! KKContainerViewElement
-                        v.reloadData()
-                    }
-                    
-                }, self)
-                
-            }
-            
+        if(property == KKProperty.ContentSize) {
+            self.reloadElements()
+        } else if(property == KKProperty.Frame) {
+            let r = newValue as! CGRect
+            container.size = r.size
         }
         
-        super.onPropertyChanged(property, value, newValue);
     }
     
     
     override public func obtainObserver(_ observer:KKObserver? ) -> Void {
         
+        let key:String? = get(KKProperty.Key) as! String?;
+        
+        if key != nil {
+            
+            reloadData()
+            
+            observer!.on([], { ( _ observer :KKObserver, _ changedKeys:[String], _ weakObject:AnyObject?) in
+                
+                if weakObject != nil {
+                    let v = weakObject! as! KKContainerViewElement
+                    v.reloadData()
+                }
+                
+            }, self)
+        }
         
     }
     
@@ -287,8 +328,27 @@ open class KKContainerViewElement: KKViewElement {
         if(name == "cell") {
             return CellElement.init(name: name)
         }
-        return super.newChildrenElement(name);
+        return super.newChildrenElement(name)
     }
     
+    override public func onAddChildren(_ element:KKElement) -> Void {
+        super.onAddChildren(element)
+        
+        if(element is CellElement) {
+            let reuse = element.get(KKProperty.Reuse, defaultValue: "")
+            container.cells[reuse] = element as? CellElement
+        }
+        
+    }
+    
+    override public func onRemoveChildren(_ element:KKElement) -> Void {
+        super.onRemoveChildren(element)
+        if(element is CellElement) {
+            let reuse = element.get(KKProperty.Reuse, defaultValue: "")
+            if container.cells[reuse] == element {
+                container.cells.removeValue(forKey: reuse)
+            }
+        }
+    }
     
 }

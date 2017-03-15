@@ -100,7 +100,7 @@ public class KKProperty : Hashable {
                 alpha = Float.init(vs[1])!;
             }
             
-            return UIColor.init(red:CGFloat.init(Double(r) / 255.0),green:CGFloat.init(Double(r) / 255.0),blue:CGFloat.init(Double(r) / 255.0),alpha:CGFloat.init(alpha));
+            return UIColor.init(red:CGFloat.init(Double(r) / 255.0),green:CGFloat.init(Double(g) / 255.0),blue:CGFloat.init(Double(b) / 255.0),alpha:CGFloat.init(alpha));
             
         }
         
@@ -430,7 +430,7 @@ public class KKProperty : Hashable {
         }
         
         if(value is KKSize) {
-            return value as! KKPoint;
+            return value as! KKSize;
         }
         
         if(value is String || value is NSString) {
@@ -685,7 +685,7 @@ public class KKProperty : Hashable {
     
     public static let Property:KKProperty = KKProperty.init(name: "property", function: KKProperty.StringFunction, virtual: false);
     
-    public static let Object:KKProperty = KKProperty.init(name: "object", function: KKProperty.ObjectFunction, virtual: false);
+    public static let Object:KKProperty = KKProperty.init(name: "object", function: KKProperty.ObjectFunction, virtual: true);
 
     public static let Style:KKProperty = KKProperty.init(name: "style", function: KKProperty.KKStyleFunction, virtual: false);
     
@@ -697,7 +697,28 @@ public class KKProperty : Hashable {
     
     public static let ContentSize:KKProperty = KKProperty.init(name: "contentSize", function: KKProperty.CGSizeFunction, virtual: false);
     
-     public static let ContentOffset:KKProperty = KKProperty.init(name: "contentOffset", function: KKProperty.CGPointFunction, virtual: false);
+    public static let MinContentSize:KKProperty = KKProperty.init(name: "min-content-size", function: KKProperty.KKSizeFunction, virtual: false);
+    
+    public static let PagingEnabled:KKProperty = KKProperty.init(name: "paging-enabled", function: KKProperty.BooleanFunction, virtual: false);
+    
+    public static let ScrollbarX:KKProperty = KKProperty.init(name: "scrollbar-x", function: KKProperty.BooleanFunction, virtual: false);
+    
+    public static let ScrollbarY:KKProperty = KKProperty.init(name: "scrollbar-y", function: KKProperty.BooleanFunction, virtual: false);
+    
+    public static let ContentOffset:KKProperty = KKProperty.init(name: "contentOffset", function: KKProperty.CGPointFunction, virtual: false);
     
     public static let Layout:KKProperty = KKProperty.init(name: "layout", function: KKProperty.KKLayoutFunction, virtual: false);
+    
+    public static let Wrap:KKProperty = KKProperty.init(name: "wrap", function: KKProperty.BooleanFunction, virtual: false);
+    
+    public static let Truncation:KKProperty = KKProperty.init(name: "truncation", function: KKProperty.StringFunction, virtual: false);
+    
+    public static let LineSpacing:KKProperty = KKProperty.init(name: "line-spacing", function: KKProperty.KKValueFunction, virtual: false);
+    
+    public static let ParagraphSpacing:KKProperty = KKProperty.init(name: "paragraph-spacing", function: KKProperty.KKValueFunction, virtual: false);
+    
+    public static let Clips:KKProperty = KKProperty.init(name: "clips", function: KKProperty.BooleanFunction, virtual: false);
+    
+    public static let Data:KKProperty = KKProperty.init(name: "data", function: KKProperty.ObjectFunction, virtual: false);
+    
 }

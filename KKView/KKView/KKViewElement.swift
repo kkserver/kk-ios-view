@@ -95,7 +95,7 @@ public extension UIView {
     
     public func KKElementSetProperty(_ element:KKViewElementProtocol,_ property:KKProperty,_ value:Any?,_ newValue:Any?) -> Void {
         
-        let view = element.view;
+        let view = self;
         
         if(property == KKProperty.Frame) {
             
@@ -202,8 +202,40 @@ public extension UIView {
                 }
             }
             
+        } else if(property == KKProperty.Clips) {
+            view.clipsToBounds = newValue as! Bool
+        }
+        
+        if view is UIScrollView {
+            
+            let scrollView = view as! UIScrollView
+            
+            if property == KKProperty.ContentSize
+                || property == KKProperty.MinContentSize
+                || property == KKProperty.Frame {
+                let e = element as! KKElement
+                let frame = e.get(KKProperty.Frame, defaultValue: CGRect.zero)
+                var contentSize = e.get(KKProperty.ContentSize, defaultValue: CGSize.zero)
+                let minSize = e.get(KKProperty.MinContentSize, defaultValue: KKSize.Zero)
+                let size = CGSize.init(width: minSize.width.floatValue(frame.size.width), height: minSize.height.floatValue(frame.size.height))
+                if contentSize.width < size.width {
+                    contentSize.width = size.width
+                }
+                if contentSize.height < size.height {
+                    contentSize.height = size.height
+                }
+                scrollView.contentSize = contentSize
+            } else if(property == KKProperty.PagingEnabled) {
+                scrollView.isPagingEnabled = newValue as! Bool
+            } else if(property == KKProperty.ScrollbarY) {
+                scrollView.showsVerticalScrollIndicator = newValue as! Bool
+            } else if(property == KKProperty.ScrollbarX) {
+                scrollView.showsHorizontalScrollIndicator = newValue as! Bool
+            }
         }
         
     }
 
 }
+
+

@@ -294,13 +294,25 @@ open class KKElement : KKEventEmitter,NSCopying , Sequence {
         
         let v:KKElement = type(of: self).init(element:self)
         
+        copyAttributes(v, with: zone)
+        
+        return v;
+    }
+    
+    public func copyAttributes(_ elmenet:KKElement,with zone: NSZone? = nil) {
+        
+        
         for (key,value) in _values {
             if(!key.virtual) {
-                v.set(key, value);
+                if value is NSCopying {
+                    elmenet.set(key, (value as! NSCopying).copy(with: zone));
+                } else {
+                    elmenet.set(key, value);
+                }
+                
             }
         }
         
-        return v;
     }
     
     public func copy(with zone: NSZone? = nil) -> Any {
@@ -499,4 +511,12 @@ open class KKElement : KKEventEmitter,NSCopying , Sequence {
         
     }
     
+    public func set(data value:Any?, key:String) ->Void {
+        var data = get(KKProperty.Data) as? NSMutableDictionary
+        if data == nil {
+            data = NSMutableDictionary.init()
+        }
+        data![key] = value
+        set(KKProperty.Data,data)
+    }
 }

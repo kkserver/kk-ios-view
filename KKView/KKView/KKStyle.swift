@@ -7,7 +7,7 @@
 //
 
 import Foundation
-
+import KKObserver
 
 open class KKStyle : NSObject{
     
@@ -39,11 +39,17 @@ open class KKStyle : NSObject{
         KKProperty.ReplayCount,KKProperty.AfterDelay,KKProperty.ToOpacity,KKProperty.Degrees,KKProperty.ToDegrees,
         KKProperty.Animation,KKProperty.Image,KKProperty.Text,KKProperty.Gravity,KKProperty.PageIndex,KKProperty.PageCount,
         KKProperty.TintColor,
-        KKProperty.ReuseKey
+        KKProperty.ReuseKey,
+        KKProperty.Layout,
+        KKProperty.Reuse,
+        KKProperty.MinContentSize,
+        KKProperty.ScrollbarX,KKProperty.ScrollbarY,
+        KKProperty.Wrap,KKProperty.Truncation,
+        KKProperty.Clips,KKProperty.Target
     ];
     
     private var _propertys:Set<KKProperty> = Set.init();
-    private var _values:Dictionary<String,Dictionary<KKProperty,Any>> = Dictionary.init()
+    private var _values:KKDictionary<String,KKDictionary<KKProperty,Any>> = KKDictionary<String,KKDictionary<KKProperty,Any>>.init()
     
     public var propertys:Set<KKProperty> {
         get {
@@ -76,10 +82,10 @@ open class KKStyle : NSObject{
     
         _propertys.insert(property);
         
-        var vs:Dictionary<KKProperty,Any>? = _values[status];
+        var vs = _values[status] ;
         
         if(vs == nil) {
-            vs = Dictionary.init();
+            vs = KKDictionary<KKProperty,Any>.init()
             _values[status] = vs!;
         }
         
@@ -88,7 +94,7 @@ open class KKStyle : NSObject{
     
     public func get(_ property:KKProperty,_ status:String) -> Any? {
         
-        let vs:Dictionary<KKProperty,Any>? = _values[status];
+        let vs = _values[status];
         
         if(vs != nil) {
             return vs![property] ;

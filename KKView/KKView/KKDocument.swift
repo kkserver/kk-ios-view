@@ -27,7 +27,6 @@ public extension KKElement {
 open class KKDocument: KKElement,KKViewElementProtocol,KKLayerElementProtocol,XMLParserDelegate {
     
     private var _styleSheet:KKStyleSheet?
-    private var _body:KKElement?
     private weak var _view:UIView?
     private var _animations:Dictionary<String,KKAnimationElement>?
     public var bundle:Bundle?
@@ -41,12 +40,6 @@ open class KKDocument: KKElement,KKViewElementProtocol,KKLayerElementProtocol,XM
     public var layer:CALayer {
         get {
             return _view!.layer
-        }
-    }
-    
-    public var body:KKElement? {
-        get {
-            return _body
         }
     }
     
@@ -92,6 +85,7 @@ open class KKDocument: KKElement,KKViewElementProtocol,KKLayerElementProtocol,XM
         super.onInit()
         set(KKProperty.Width,"100%");
         set(KKProperty.Height,"100%");
+        set(KKProperty.Layout,"relative");
     }
     
     override internal func onPropertyChanged(_ property:KKProperty,_ value:Any?,_ newValue:Any?) {
@@ -164,7 +158,6 @@ open class KKDocument: KKElement,KKViewElementProtocol,KKLayerElementProtocol,XM
     public func parserDidStartDocument(_ parser: XMLParser) {
         removeAllChildren()
         _element = nil
-        _body = nil
         _text = nil
         _animations = Dictionary.init()
         _styleSheet = KKStyleSheet.init();
@@ -183,18 +176,24 @@ open class KKDocument: KKElement,KKViewElementProtocol,KKLayerElementProtocol,XM
         
         if(_element == nil) {
             e = self
-        }
-        else {
+        } else {
             e = styleSheet!.newElement(_element, elementName)
-            e.appendTo(_element!)
-        }
-       
-        for (key,value) in attributeDict {
-            KKStyle.set(element: e, key, value)
         }
         
-        if(_body == nil && elementName == "body") {
-            _body = e
+        let data = NSMutableDictionary.init()
+        
+        for (key,value) in attributeDict {
+            if key.hasPrefix("data-") {
+                data[key.substring(from: key.index(key.startIndex, offsetBy: 5))] = value
+            } else {
+                KKStyle.set(element: e, key, value)
+            }
+        }
+        
+        e.set(KKProperty.Data, data)
+        
+        if(_element != nil) {
+            e.appendTo(_element!)
         }
         
         _element = e
@@ -208,7 +207,9 @@ open class KKDocument: KKElement,KKViewElementProtocol,KKLayerElementProtocol,XM
     public func parser(_ parser: XMLParser, didEndElement elementName: String, namespaceURI: String?, qualifiedName qName: String?) {
         
         if(_text != nil) {
-            _element!.set(KKProperty.Text,_text)
+            if(_element?.firstChild == nil) {
+                _element!.set(KKProperty.Text,_text)
+            }
             _text = nil
         }
         

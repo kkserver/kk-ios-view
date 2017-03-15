@@ -130,7 +130,7 @@ open class KKLayout {
             return KKFlowLayout.init(nowarp: false)
         }
         else if(value == "flow-nowarp") {
-            return KKFlowLayout.init(nowarp: false)
+            return KKFlowLayout.init(nowarp: true)
         }
         else if(value == "none") {
             return KKLayout.init()
@@ -166,7 +166,8 @@ open class KKLayout {
             size.height = paddingTop + paddingBottom
             
             for p in element {
-              
+                
+                
                 let layout = p.get(KKProperty.Layout) as! KKLayout?
                 
                 if(layout != nil) {
@@ -186,6 +187,8 @@ open class KKLayout {
                         else {
                             r.origin.x = paddingLeft + (inSize.width - r.size.width - right.floatValue(inSize.width))
                         }
+                    } else {
+                        r.origin.x = paddingLeft + left.floatValue(inSize.width)
                     }
                     
                     if(top.isAuto()) {
@@ -262,7 +265,7 @@ open class KKLayout {
         
             for e in element {
                 
-                let layout = e.get(KKProperty.Frame) as! KKLayout?
+                let layout = e.get(KKProperty.Layout) as! KKLayout?
                 let hidden = e.get(KKProperty.Hidden, defaultValue: false)
                 
                 if(layout != nil && !hidden) {

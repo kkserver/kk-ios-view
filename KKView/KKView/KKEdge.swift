@@ -11,42 +11,44 @@ import Foundation
 
 public struct KKEdge {
     
-    public var left:KKValue;
     public var top:KKValue;
     public var right:KKValue;
     public var bottom:KKValue;
+    public var left:KKValue;
+
     
-    public static let Zero:KKEdge = KKEdge.init(left: KKValue.Zero, top: KKValue.Zero, right: KKValue.Zero, bottom: KKValue.Zero)
+    public static let Zero:KKEdge = KKEdge.init( top: KKValue.Zero, right: KKValue.Zero, bottom: KKValue.Zero,left: KKValue.Zero)
     
     public static func valueOf(_ value:String)->KKEdge {
         
-        var v:KKEdge = KKEdge.init(left: KKValue.Zero, top: KKValue.Zero, right: KKValue.Zero, bottom: KKValue.Zero);
+        var v:KKEdge = KKEdge.init(top: KKValue.Zero, right: KKValue.Zero, bottom: KKValue.Zero,left: KKValue.Zero);
         
         let vs:[String] = value.components(separatedBy: " ");
         
         if(vs.count > 0) {
-            v.left = KKValue.valueOf(vs[0]);
+            
+            v.top = KKValue.valueOf(vs[0]);
             
             if(vs.count > 1) {
-                v.top = KKValue.valueOf(vs[1]);
+                v.right = KKValue.valueOf(vs[1]);
                 if(vs.count > 2) {
-                    v.right = KKValue.valueOf(vs[2]);
+                    v.bottom = KKValue.valueOf(vs[2]);
                     if(vs.count > 3) {
-                        v.bottom = KKValue.valueOf(vs[4]);
+                        v.left = KKValue.valueOf(vs[3]);
                     }
                     else {
-                        v.bottom = v.top;
+                        v.left = v.right;
                     }
                 }
                 else {
-                    v.right = v.left;
+                    v.left = v.right;
                     v.bottom = v.top;
                 }
             }
             else {
-                v.right = v.left;
-                v.top = v.left;
-                v.bottom = v.left;
+                v.right = v.top;
+                v.left = v.top;
+                v.bottom = v.top;
             }
         }
         

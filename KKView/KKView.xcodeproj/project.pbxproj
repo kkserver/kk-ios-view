@@ -7,6 +7,11 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		AC3CC1C91E7913280090BFC2 /* KKImageElement.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC3CC1C81E7913280090BFC2 /* KKImageElement.swift */; };
+		AC3CC1CC1E79140A0090BFC2 /* KKHttp.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AC3CC1CB1E79140A0090BFC2 /* KKHttp.framework */; };
+		AC3CC1CF1E791E0B0090BFC2 /* KKPagerViewElement.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC3CC1CE1E791E0B0090BFC2 /* KKPagerViewElement.swift */; };
+		AC3CC1D31E7988800090BFC2 /* KKButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC3CC1D21E7988800090BFC2 /* KKButton.swift */; };
+		AC3CC1D51E7990170090BFC2 /* KKControlElement.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC3CC1D41E7990170090BFC2 /* KKControlElement.swift */; };
 		AC7F32761E7267E600868EE8 /* KKObserver.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AC7F32751E7267E600868EE8 /* KKObserver.framework */; };
 		ACB7F39D1DDACC060098B7B9 /* KKProperty.swift in Sources */ = {isa = PBXBuildFile; fileRef = ACB7F39C1DDACC060098B7B9 /* KKProperty.swift */; };
 		ACB7F39F1DDACC3E0098B7B9 /* KKValue.swift in Sources */ = {isa = PBXBuildFile; fileRef = ACB7F39E1DDACC3E0098B7B9 /* KKValue.swift */; };
@@ -33,6 +38,11 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		AC3CC1C81E7913280090BFC2 /* KKImageElement.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KKImageElement.swift; sourceTree = "<group>"; };
+		AC3CC1CB1E79140A0090BFC2 /* KKHttp.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = KKHttp.framework; path = ../../../../../../../Frameworks/KKHttp.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		AC3CC1CE1E791E0B0090BFC2 /* KKPagerViewElement.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KKPagerViewElement.swift; sourceTree = "<group>"; };
+		AC3CC1D21E7988800090BFC2 /* KKButton.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KKButton.swift; sourceTree = "<group>"; };
+		AC3CC1D41E7990170090BFC2 /* KKControlElement.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KKControlElement.swift; sourceTree = "<group>"; };
 		AC7F32751E7267E600868EE8 /* KKObserver.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = KKObserver.framework; path = ../../../../../../../Frameworks/KKObserver.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		ACB7F39C1DDACC060098B7B9 /* KKProperty.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KKProperty.swift; sourceTree = "<group>"; };
 		ACB7F39E1DDACC3E0098B7B9 /* KKValue.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KKValue.swift; sourceTree = "<group>"; };
@@ -65,6 +75,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				AC3CC1CC1E79140A0090BFC2 /* KKHttp.framework in Frameworks */,
 				AC7F32761E7267E600868EE8 /* KKObserver.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -94,6 +105,7 @@
 			children = (
 				ACCD871C1DB4768900C2E792 /* KKView.h */,
 				ACCD871D1DB4768900C2E792 /* Info.plist */,
+				AC3CC1D21E7988800090BFC2 /* KKButton.swift */,
 				ACCD87291DB4949700C2E792 /* KKEvent.swift */,
 				ACCD872B1DB4982C00C2E792 /* KKElement.swift */,
 				ACB7F39C1DDACC060098B7B9 /* KKProperty.swift */,
@@ -115,6 +127,9 @@
 				ACCDE4371DE97BE800E6C255 /* KKDocument.swift */,
 				ACCDE43B1DE9890400E6C255 /* KKAnimationElement.swift */,
 				ACEA56231E71558C002DF69F /* KKContainerViewElement.swift */,
+				AC3CC1C81E7913280090BFC2 /* KKImageElement.swift */,
+				AC3CC1CE1E791E0B0090BFC2 /* KKPagerViewElement.swift */,
+				AC3CC1D41E7990170090BFC2 /* KKControlElement.swift */,
 			);
 			path = KKView;
 			sourceTree = "<group>";
@@ -122,6 +137,7 @@
 		ACCD87241DB48F2900C2E792 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				AC3CC1CB1E79140A0090BFC2 /* KKHttp.framework */,
 				AC7F32751E7267E600868EE8 /* KKObserver.framework */,
 			);
 			name = Frameworks;
@@ -209,8 +225,10 @@
 			buildActionMask = 2147483647;
 			files = (
 				ACCD872C1DB4982C00C2E792 /* KKElement.swift in Sources */,
+				AC3CC1D51E7990170090BFC2 /* KKControlElement.swift in Sources */,
 				ACBD8F041DDC04B500445053 /* KKLayout.swift in Sources */,
 				ACBD8EFC1DDBFC2D00445053 /* KKTextElement.swift in Sources */,
+				AC3CC1D31E7988800090BFC2 /* KKButton.swift in Sources */,
 				ACCDE43C1DE9890400E6C255 /* KKAnimationElement.swift in Sources */,
 				ACB7F3AB1DDAE9C90098B7B9 /* KKStyle.swift in Sources */,
 				ACCD872A1DB4949700C2E792 /* KKEvent.swift in Sources */,
@@ -222,6 +240,8 @@
 				ACBD8F021DDC044E00445053 /* KKSize.swift in Sources */,
 				ACBD8EFA1DDB131600445053 /* ReflectElementProtocol.swift in Sources */,
 				ACBD8EF81DDB057C00445053 /* KKStyleSheet.swift in Sources */,
+				AC3CC1C91E7913280090BFC2 /* KKImageElement.swift in Sources */,
+				AC3CC1CF1E791E0B0090BFC2 /* KKPagerViewElement.swift in Sources */,
 				ACCDE4301DE96A4C00E6C255 /* KKScriptElement.swift in Sources */,
 				ACB7F39F1DDACC3E0098B7B9 /* KKValue.swift in Sources */,
 				ACCDE4321DE96D3300E6C255 /* KKOutletElement.swift in Sources */,

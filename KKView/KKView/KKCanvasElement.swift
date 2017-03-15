@@ -10,6 +10,10 @@ import Foundation
 
 open class KKCanvasElement : KKElement,CALayerDelegate,KKLayerElementProtocol {
 
+    public class func defaultLayer() -> CALayer {
+        return CALayer.init()
+    }
+    
     private let _layer:CALayer;
     
     public var layer:CALayer {
@@ -42,17 +46,19 @@ open class KKCanvasElement : KKElement,CALayerDelegate,KKLayerElementProtocol {
         }
         
         if(clazz == nil) {
-            _layer = CALayer.init()
+            _layer = type(of: self).defaultLayer()
         }
         else {
             _layer = (clazz! as! CALayer.Type).init();
         }
+    
         super.init()
     }
     
     internal override func onInit() ->Void {
         super.onInit()
         _layer.delegate = self
+        _layer.contentsScale = UIScreen.main.scale
     }
     
     public func draw(_ layer: CALayer, in ctx: CGContext) {
@@ -197,6 +203,8 @@ extension CALayer {
                 }
             }
             
+        } else if(property == KKProperty.Clips) {
+            layer.masksToBounds = newValue as! Bool
         }
         
         CATransaction.commit();

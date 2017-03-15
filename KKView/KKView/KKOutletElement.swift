@@ -11,8 +11,22 @@ import KKObserver
 
 public extension KKElement {
 
-    public func set(outlet:KKOutletElement, prop:KKProperty, value:Any?) ->Void {
-        set(prop, value);
+    public func set(outlet:KKOutletElement, prop:KKProperty, name:String, value:Any?) ->Void {
+        if prop == KKProperty.Data {
+            var data = get(KKProperty.Data) as? NSMutableDictionary
+            if data == nil {
+                data = NSMutableDictionary.init()
+            }
+            let key = name.substring(from: name.index(name.startIndex, offsetBy: 5))
+            if value == nil {
+                data!.removeObject(forKey: key)
+            } else {
+                data![key] = value
+            }
+            set(KKProperty.Data,data)
+        } else {
+            set(prop, value);
+        }
     }
     
 }
@@ -43,15 +57,15 @@ open class KKOutletElement: KKScriptElement {
                 
                 let name = get(KKProperty.Name,defaultValue: "")
                 
-                let prop = KKStyle.get(name)
+                let prop = name.hasPrefix("data-") ? KKProperty.Data : KKStyle.get(name)
                 
                 if prop != nil {
                     
-                    onValueChanged(observer: obs!, changedKeys: [], prop: prop!, value: obs!.get([]));
+                    onValueChanged(observer: obs!, changedKeys: [], prop: prop!, name:name, value: obs!.get([]));
                     
                     obs!.on([], { (obs:KKObserver, changedKeys:[String], weakObject:AnyObject?) in
                         if(weakObject != nil) {
-                            (weakObject as! KKOutletElement?)!.onValueChanged(observer: obs, changedKeys: changedKeys,prop: prop!, value: obs.get([]));
+                            (weakObject as! KKOutletElement?)!.onValueChanged(observer: obs, changedKeys: changedKeys,prop: prop!, name:name, value: obs.get([]));
                         }
                         }, self);
                 }
@@ -63,7 +77,7 @@ open class KKOutletElement: KKScriptElement {
         super.onPropertyChanged(property, value, newValue);
     }
     
-    internal func onValueChanged(observer:KKObserver, changedKeys:[String], prop:KKProperty, value: Any?) ->Void {
+    internal func onValueChanged(observer:KKObserver, changedKeys:[String], prop:KKProperty, name: String, value: Any?) ->Void {
         
         var v = value;
         
@@ -83,7 +97,7 @@ open class KKOutletElement: KKScriptElement {
             let target = self.value(forKeyPath: get(KKProperty.Target, defaultValue: "parent")) as! KKElement?
             
             if(target != nil) {
-                target!.set(outlet: self, prop: prop, value: v);
+                target!.set(outlet: self, prop: prop, name: name, value: v);
             }
         }
     }

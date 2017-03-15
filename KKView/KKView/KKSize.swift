@@ -11,6 +11,8 @@ import Foundation
 
 public struct KKSize {
     
+    public static let Zero = KKSize.init(width: KKValue.Zero, height: KKValue.Zero)
+    
     public var width:KKValue;
     public var height:KKValue;
     

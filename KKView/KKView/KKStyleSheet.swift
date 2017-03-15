@@ -60,12 +60,15 @@ open class KKStyleSheet : NSObject {
             
             if(v != nil) {
                 
-                let vv = v!.get(KKProperty.Class, "", defaultValue:"KKElement")
-                let clazz:AnyClass? = NSClassFromString(vv)
+                let vv = v!.get(KKProperty.Class, "")
                 
-                if( clazz != nil) {
-                    e = (clazz as! KKElement.Type).init(name: name)
+                if( vv != nil) {
+                    e = (vv as! KKElement.Type).init(name: name)
+                } else {
+                    e = KKElement.init(name: name)
                 }
+                
+                e!.set(KKProperty.Style, v)
                 
             }
         }
