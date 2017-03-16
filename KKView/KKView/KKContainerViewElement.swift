@@ -265,18 +265,22 @@ open class KKContainerViewElement: KKViewElement ,UIScrollViewDelegate{
             if isVisibleRect(frame: item.frame) {
                 
                 if item.element == nil {
-                    item.element = container.dequeue(reuse: item.reuse)
-                    item.element!.set(KKProperty.Frame, item.frame)
-                    item.element!.set(KKProperty.ContentOffset, item.offset)
-                    item.element!.set(KKProperty.Key,item.keys)
-                    item.element!.set(KKProperty.Observer,container.observer)
-                    item.element!.layoutChildren()
-                    item.element!.appendTo(self)
+                    let e = container.dequeue(reuse: item.reuse)
+                    e.set(KKProperty.Frame, item.frame)
+                    e.set(KKProperty.ContentOffset, item.offset)
+                    let obs = e.get(KKProperty.Observer) as? KKObserver
+                    let key = e.get(KKProperty.Key) as? String
+                    if obs != container.observer || key != item.keys {
+                        e.set(KKProperty.Key,item.keys)
+                        e.set(KKProperty.Observer,container.observer)
+                        e.layoutChildren()
+                    }
+                    e.appendTo(self)
+                    item.element = e
                 }
                 
             } else if(item.element != nil) {
                 container.enqueue(element: item.element!)
-                item.element!.set(KKProperty.Observer,nil)
                 item.element!.remove()
                 item.element = nil
             }
