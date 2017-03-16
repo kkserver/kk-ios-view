@@ -30,7 +30,7 @@ open class KKTextElement :KKCanvasElement {
                     frame.size.height = CGFloat.greatestFiniteMagnitude
                 }
                 
-                let bounds = e.string.boundingRect(with: frame.size, options: NSStringDrawingOptions.usesLineFragmentOrigin, context: nil)
+                let bounds = e.bounds(size: frame.size)
                 
                 var size = bounds.size
                 
@@ -233,41 +233,58 @@ open class KKTextElement :KKCanvasElement {
         return attrs
     }
     
+    private var _string:NSAttributedString?
+    
     public var string:NSAttributedString {
         
         get {
             
-            var p = self.firstChild
-            
-            if p == nil {
-                let string = get(KKProperty.Text,defaultValue:"")
-                return NSAttributedString.init(string: string, attributes: attributes(element: self))
-            } else {
+            if _string == nil {
                 
-                let string = NSMutableAttributedString.init()
+                var p = self.firstChild
                 
-                while(p != nil) {
+                if p == nil {
+                    let string = get(KKProperty.Text,defaultValue:"")
+                    _string = NSAttributedString.init(string: string, attributes: attributes(element: self))
+                } else {
                     
+                    let string = NSMutableAttributedString.init()
                     
-                    if p is ImageElement {
+                    while(p != nil) {
                         
-                        let e = p as! ImageElement?
-                        let image = NSTextAttachment.init()
-                        image.image = e!.image
-                        image.bounds = e!.bounds
-                        string.append(NSAttributedString.init(attachment: image))
-                    
-                    } else if( p is TextElement )  {
-                        string.append(NSAttributedString.init(string: p!.get(KKProperty.Text, defaultValue:""), attributes: attributes(element: p!)))
+                        if p is ImageElement {
+                            
+                            let e = p as! ImageElement?
+                            let image = NSTextAttachment.init()
+                            image.image = e!.image
+                            image.bounds = e!.bounds
+                            string.append(NSAttributedString.init(attachment: image))
+                            
+                        } else if( p is TextElement )  {
+                            string.append(NSAttributedString.init(string: p!.get(KKProperty.Text, defaultValue:""), attributes: attributes(element: p!)))
+                        }
+                        
+                        p = p!.nextSibling
                     }
-                    p = p!.nextSibling
+                    
+                    _string = string
                 }
-                
-                return string
             }
             
+            return _string!
         }
         
+    }
+    
+    private var _size:CGSize = CGSize.zero
+    private var _bounds:CGRect = CGRect.zero
+    
+    public func bounds(size:CGSize) -> CGRect {
+        if !_size.equalTo(size) {
+            _bounds = string.boundingRect(with: size, options: NSStringDrawingOptions.usesLineFragmentOrigin, context: nil)
+            _size = size
+        }
+        return _bounds
     }
     
     override internal func onPropertyChanged(_ property:KKProperty,_ value:Any?,_ newValue:Any?) {
@@ -319,6 +336,9 @@ open class KKTextElement :KKCanvasElement {
         let v = self
         
         DispatchQueue.main.async {
+            v._string = nil
+            v._size = CGSize.zero
+            v._bounds = CGRect.zero
             e.string = v.string
             v._displaying = false
         }
