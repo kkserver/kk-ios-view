@@ -185,7 +185,7 @@ open class KKLayout {
                             r.origin.x = paddingLeft + (inSize.width - r.size.width) * 0.5
                         }
                         else {
-                            r.origin.x = paddingLeft + (inSize.width - r.size.width - right.floatValue(inSize.width))
+                            r.origin.x = (frame.size.width - r.size.width - right.floatValue(inSize.width) - paddingRight)
                         }
                     } else {
                         r.origin.x = paddingLeft + left.floatValue(inSize.width)
@@ -196,7 +196,7 @@ open class KKLayout {
                             r.origin.y = paddingTop + (inSize.height - r.size.height) * 0.5
                         }
                         else {
-                            r.origin.y = paddingTop + (inSize.height - r.size.height - bottom.floatValue(inSize.height))
+                            r.origin.y = (frame.size.height - r.size.height - bottom.floatValue(inSize.height) - paddingBottom)
                         }
                     }
                     else {
