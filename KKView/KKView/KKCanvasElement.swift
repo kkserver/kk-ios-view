@@ -27,6 +27,10 @@ open class KKCanvasElement : KKElement,CALayerDelegate,KKLayerElementProtocol {
         super.init()
     }
     
+    deinit {
+        _layer.delegate = nil
+    }
+    
     public required init() {
         _layer = CALayer.init()
         super.init()
@@ -37,22 +41,18 @@ open class KKCanvasElement : KKElement,CALayerDelegate,KKLayerElementProtocol {
         super.init(element: element);
     }
     
-    public required init(name: String) {
+    public required init(style: KKStyle) {
         
-        var clazz:AnyClass? = nil
+        let v = style.get(KKProperty.Layer, "")
         
-        if(name.contains(":")) {
-            clazz = NSClassFromString(name.components(separatedBy: ":").last!)
-        }
-        
-        if(clazz == nil) {
+        if(v == nil) {
             _layer = type(of: self).defaultLayer()
         }
         else {
-            _layer = (clazz! as! CALayer.Type).init();
+            _layer = (v! as! CALayer.Type).init();
         }
     
-        super.init()
+        super.init(style: style)
     }
     
     internal override func onInit() ->Void {
@@ -83,20 +83,11 @@ open class KKCanvasElement : KKElement,CALayerDelegate,KKLayerElementProtocol {
     }
     
     override internal func onPropertyChanged(_ property:KKProperty,_ value:Any?,_ newValue:Any?) {
-        _layer.KKElementSetProperty(self, property, value, newValue)
-        super.onPropertyChanged(property, value, newValue)
-    }
-    
-}
-
-extension CALayer {
-    
-    public func KKElementSetProperty(_ element:KKCanvasElement,_ property:KKProperty,_ value:Any?,_ newValue:Any?) -> Void {
         
         CATransaction.begin()
         CATransaction.setDisableActions(true);
         
-        let layer = element.layer;
+        let layer = self.layer;
         
         if(property == KKProperty.Frame) {
             
@@ -194,7 +185,7 @@ extension CALayer {
             if(newValue == nil) {
                 layer.removeAllAnimations()
             } else {
-                let doc = element.document
+                let doc = document
                 if(doc != nil){
                     let anim = doc!.getAnimation(newValue as! String)
                     if anim != nil {
@@ -204,11 +195,29 @@ extension CALayer {
             }
             
         } else if(property == KKProperty.Clips) {
-            layer.masksToBounds = newValue as! Bool
+            layer.masksToBounds = newValue != nil ? newValue as! Bool : false
+        } else if(property == KKProperty.MaskColor) {
+            if newValue == nil {
+                layer.mask = nil
+            } else {
+                var f = layer.bounds
+                f.origin = CGPoint.zero
+                let mask = CALayer.init()
+                mask.frame = f
+                mask.backgroundColor = (newValue as! UIColor).cgColor
+                layer.mask = mask
+            }
         }
         
         CATransaction.commit();
+        
+        if layer is KKElementPropertyProtocol {
+            (layer as! KKElementPropertyProtocol).setElement(self, property: property, value: value, newValue: newValue)
+        }
+        
+        super.onPropertyChanged(property, value, newValue)
     }
     
 }
+
 

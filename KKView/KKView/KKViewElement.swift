@@ -43,22 +43,18 @@ open class KKViewElement: KKElement,KKViewElementProtocol , KKLayerElementProtoc
         super.init(element:element)
     }
     
-    public required init(name: String) {
+    public required init(style: KKStyle) {
         
-        var clazz:AnyClass? = nil
+        let v = style.get(KKProperty.View, "")
         
-        if(name.contains(":")) {
-            clazz = NSClassFromString(name.components(separatedBy: ":").last!)
-        }
-        
-        if(clazz == nil) {
+        if(v == nil) {
             _view = type(of: self).defaultView()
         }
         else {
-            _view = (clazz! as! UIView.Type).init(frame:CGRect.zero);
+            _view = (v! as! UIView.Type).init(frame:CGRect.zero);
         }
         
-        super.init()
+        super.init(style:style)
     }
     
     internal override func onInit() ->Void {
@@ -84,18 +80,8 @@ open class KKViewElement: KKElement,KKViewElementProtocol , KKLayerElementProtoc
     }
     
     override internal func onPropertyChanged(_ property:KKProperty,_ value:Any?,_ newValue:Any?) {
-        _view.KKElementSetProperty(self, property, value, newValue)
-        super.onPropertyChanged(property, value, newValue)
-    }
-
-    
-}
-
-public extension UIView {
-    
-    public func KKElementSetProperty(_ element:KKViewElementProtocol,_ property:KKProperty,_ value:Any?,_ newValue:Any?) -> Void {
         
-        let view = self;
+        let view = _view
         
         if(property == KKProperty.Frame) {
             
@@ -130,7 +116,7 @@ public extension UIView {
                 view.layer.borderWidth = 0;
             }
             else {
-                view.layer.borderWidth = v!.floatValue(layer.bounds.size.width);
+                view.layer.borderWidth = v!.floatValue(view.bounds.size.width);
             }
         }
         else if(property == KKProperty.BorderRadius) {
@@ -141,7 +127,7 @@ public extension UIView {
                 view.layer.cornerRadius = 0;
             }
             else {
-                view.layer.cornerRadius = v!.floatValue(layer.bounds.size.width)
+                view.layer.cornerRadius = v!.floatValue(view.bounds.size.width)
             }
             
         }
@@ -173,7 +159,7 @@ public extension UIView {
                 view.layer.shadowRadius = 0;
             }
             else {
-                view.layer.shadowRadius = v!.floatValue(layer.bounds.size.width)
+                view.layer.shadowRadius = v!.floatValue(view.bounds.size.width)
             }
         }
         else if(property == KKProperty.ShadowOpacity) {
@@ -185,7 +171,7 @@ public extension UIView {
                 view.layer.shadowOffset = CGSize.zero
             }
             else {
-                view.layer.shadowOffset = CGSize.init(width: v!.width.floatValue(layer.bounds.size.width), height: v!.height.floatValue(layer.bounds.size.height));
+                view.layer.shadowOffset = CGSize.init(width: v!.width.floatValue(view.bounds.size.width), height: v!.height.floatValue(view.bounds.size.height));
             }
         }
         else if(property == KKProperty.Animation) {
@@ -193,7 +179,7 @@ public extension UIView {
             if(newValue == nil) {
                 view.layer.removeAllAnimations()
             } else {
-                let doc = (element as! KKElement).document
+                let doc = document
                 if(doc != nil){
                     let anim = doc!.getAnimation(newValue as! String)
                     if anim != nil {
@@ -203,7 +189,18 @@ public extension UIView {
             }
             
         } else if(property == KKProperty.Clips) {
-            view.clipsToBounds = newValue as! Bool
+            view.clipsToBounds = newValue == nil ? false : newValue as! Bool
+        } else if(property == KKProperty.MaskColor) {
+            if newValue == nil {
+                view.layer.mask = nil
+            } else {
+                var f = view.layer.bounds
+                f.origin = CGPoint.zero
+                let mask = CALayer.init()
+                mask.frame = f
+                mask.backgroundColor = (newValue as! UIColor).cgColor
+                view.layer.mask = mask
+            }
         }
         
         if view is UIScrollView {
@@ -213,7 +210,7 @@ public extension UIView {
             if property == KKProperty.ContentSize
                 || property == KKProperty.MinContentSize
                 || property == KKProperty.Frame {
-                let e = element as! KKElement
+                let e = self
                 let frame = e.get(KKProperty.Frame, defaultValue: CGRect.zero)
                 var contentSize = e.get(KKProperty.ContentSize, defaultValue: CGSize.zero)
                 let minSize = e.get(KKProperty.MinContentSize, defaultValue: KKSize.Zero)
@@ -234,8 +231,12 @@ public extension UIView {
             }
         }
         
+        if view is KKElementPropertyProtocol {
+            (view as! KKElementPropertyProtocol).setElement(self, property: property, value: value, newValue: newValue)
+        }
+  
+        super.onPropertyChanged(property, value, newValue)
     }
 
+    
 }
-
-

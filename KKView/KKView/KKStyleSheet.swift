@@ -46,7 +46,7 @@ open class KKStyleSheet : NSObject {
         return v;
     }
     
-    public func newElement(_ element:KKElement? ,_ name:String) -> KKElement {
+    public func newElement(_ element:KKElement? ,_ name:String,_ styleName:String) -> KKElement {
         
         var e:KKElement? = nil
         
@@ -56,20 +56,23 @@ open class KKStyleSheet : NSObject {
         
         if e == nil {
             
-            let v = get(name)
+            let v = get(styleName)
             
             if(v != nil) {
                 
                 let vv = v!.get(KKProperty.Class, "")
                 
                 if( vv != nil) {
-                    e = (vv as! KKElement.Type).init(name: name)
+                    e = (vv as! KKElement.Type).init(style: v!)
                 } else {
-                    e = KKElement.init(name: name)
+                    e = KKElement.init(style: v!)
                 }
                 
-                e!.set(KKProperty.Style, v)
-                
+            }
+        } else {
+            let v = get(styleName)
+            if(v != nil) {
+                e!.set(KKProperty.Style,v)
             }
         }
         

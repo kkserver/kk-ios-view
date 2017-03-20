@@ -8,7 +8,7 @@
 
 import UIKit
 
-public protocol KKViewElementProtocol: NSObjectProtocol {
+@objc public protocol KKViewElementProtocol: NSObjectProtocol {
     
     var view:UIView { get }
     

@@ -19,15 +19,15 @@ open class KKControlElement: KKViewElement {
     internal override func onInit() ->Void {
         super.onInit()
         (self.view as! UIControl).addTarget(self, action: #selector(KKControlElement.onAction), for: UIControlEvents.touchUpInside)
-        self.view.addObserver(self, forKeyPath: "isEnabled", options: .new, context: nil)
-        self.view.addObserver(self, forKeyPath: "isHighlighted", options: .new, context: nil)
-        self.view.addObserver(self, forKeyPath: "isSelected", options: .new, context: nil)
+        self.view.addObserver(self, forKeyPath: "enabled", options: .new, context: nil)
+        self.view.addObserver(self, forKeyPath: "highlighted", options: .new, context: nil)
+        self.view.addObserver(self, forKeyPath: "selected", options: .new, context: nil)
     }
     
     deinit {
-        self.view.removeObserver(self, forKeyPath: "isEnabled")
-        self.view.removeObserver(self, forKeyPath: "isHighlighted")
-        self.view.removeObserver(self, forKeyPath: "isSelected")
+        self.view.removeObserver(self, forKeyPath: "enabled")
+        self.view.removeObserver(self, forKeyPath: "highlighted")
+        self.view.removeObserver(self, forKeyPath: "selected")
     }
     
     internal func onAction() ->Void {
@@ -55,7 +55,7 @@ open class KKControlElement: KKViewElement {
     
     open override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey : Any]?, context: UnsafeMutableRawPointer?) {
         
-        if(keyPath == "isEnabled" || keyPath == "isHighlighted" || keyPath == "isSelected") {
+        if(keyPath == "enabled" || keyPath == "highlighted" || keyPath == "selected") {
             refreshState()
         }
         

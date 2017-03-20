@@ -67,27 +67,11 @@ open class KKContainerViewElement: KKViewElement ,UIScrollViewDelegate{
     
     public class CellElement: KKElement {
         
-        public let name:String
         public var item:Item? = nil
-        
-        public required init(name:String) {
-            self.name = name
-            super.init(name:name)
-        }
-        
-        public required init(element: KKElement) {
-            self.name = ""
-            super.init(element:element)
-        }
-        
-        public required init() {
-            self.name = ""
-            super.init()
-        }
         
         public func newElement(with zone: NSZone? = nil) -> KKElement {
             
-            let v:KKElement = ItemElement.init(name:name)
+            let v:KKElement = ItemElement.init()
             
             copyAttributes(v, with: zone)
             
@@ -162,7 +146,6 @@ open class KKContainerViewElement: KKViewElement ,UIScrollViewDelegate{
                 cell!.item = item
                 cell!.set(KKProperty.Key, item.keys)
                 cell!.set(KKProperty.Observer, _container.observer)
-                cell!.layout(_container.size)
                 
                 return cell
             }
@@ -180,8 +163,8 @@ open class KKContainerViewElement: KKViewElement ,UIScrollViewDelegate{
         super.init(view:UIScrollView.init(frame: CGRect.zero))
     }
     
-    public required init(name: String) {
-        super.init(name: name)
+    public required init(style: KKStyle) {
+        super.init(style: style)
     }
     
     public required init(element: KKElement) {
@@ -190,6 +173,7 @@ open class KKContainerViewElement: KKViewElement ,UIScrollViewDelegate{
     
     deinit {
         self.view.removeObserver(self, forKeyPath: "contentOffset")
+        (self.view as! UIScrollView).delegate = nil
     }
     
     internal override func onInit() ->Void {
@@ -330,7 +314,7 @@ open class KKContainerViewElement: KKViewElement ,UIScrollViewDelegate{
     
     override public func newChildrenElement(_ name:String) -> KKElement? {
         if(name == "cell") {
-            return CellElement.init(name: name)
+            return CellElement.init()
         }
         return super.newChildrenElement(name)
     }

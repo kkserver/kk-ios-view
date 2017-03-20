@@ -96,7 +96,18 @@ open class KKTextElement :KKCanvasElement {
             return super.onPropertyChanging(property, value, newValue)
         }
 
-        
+        override internal func onPropertyChanged(_ property:KKProperty,_ value:Any?,_ newValue:Any?) {
+            super.onPropertyChanged(property, value, newValue);
+
+            if(property == KKProperty.Text
+                || property == KKProperty.Font
+                || property == KKProperty.Color
+                || property == KKProperty.Wrap
+                || property == KKProperty.TextAlign) {
+                (parent as? KKTextElement)?.setNeedsDisplay()
+            }
+        }
+
     }
     
     open class ImageElement : KKElement {
@@ -106,7 +117,7 @@ open class KKTextElement :KKCanvasElement {
         public var image:UIImage? {
             get {
                 if _image == nil {
-                    _image = KKImageElement.imageWithURI(get(KKProperty.Src, defaultValue: ""))
+                    _image = UIImage.image(uri: get(KKProperty.Src, defaultValue: ""))
                 }
                 return _image
             }
@@ -119,6 +130,21 @@ open class KKTextElement :KKCanvasElement {
             }
             
             return super.onPropertyChanging(property, value, newValue)
+        }
+        
+        override internal func onPropertyChanged(_ property:KKProperty,_ value:Any?,_ newValue:Any?) {
+            super.onPropertyChanged(property, value, newValue);
+            
+            if(property == KKProperty.Padding
+                || property == KKProperty.Margin
+                || property == KKProperty.Width
+                || property == KKProperty.Height
+                || property == KKProperty.MinWidth
+                || property == KKProperty.MinHeight
+                || property == KKProperty.MaxWidth
+                || property == KKProperty.MaxHeight) {
+                (parent as? KKTextElement)?.setNeedsDisplay()
+            }
         }
         
         public var bounds:CGRect {
@@ -366,9 +392,9 @@ open class KKTextElement :KKCanvasElement {
     
     override public func newChildrenElement(_ name:String) -> KKElement? {
         if(name == "img") {
-            return ImageElement.init(name: name)
+            return ImageElement.init()
         } else if(name == "span") {
-            return TextElement.init(name: name)
+            return TextElement.init()
         }
         return super.newChildrenElement(name)
     }

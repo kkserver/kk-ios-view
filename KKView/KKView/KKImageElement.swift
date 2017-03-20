@@ -89,6 +89,7 @@ open class KKImageElement: KKCanvasElement {
     private static var _onload = { (image:Any?, error:Error?, element:AnyObject?) in
         if element != nil {
             let e = (element as! KKImageElement?)!
+            e._http = nil
             if image != nil {
                 e._status = .None
                 e._image = image as! UIImage?
@@ -103,23 +104,10 @@ open class KKImageElement: KKCanvasElement {
     private static var _onfail = { (error:Error?, element:AnyObject?) in
         if element != nil {
             let e = (element as! KKImageElement?)!
+            e._http = nil
             e._status = .Fail
             e.layer.contents = e.visibleImage?.cgImage
         }
-    }
-    
-    public static func imageWithURI(_ uri:String) ->UIImage? {
-        if uri.hasPrefix("@") {
-            return UIImage.init(named: uri.substring(from: uri.index(uri.startIndex, offsetBy: 1)))
-        } else if uri.hasPrefix("/") {
-            return UIImage.init(named: uri)
-        } else {
-            let (path,_,ok) = KKHttpOptions.cachePath(url: uri)
-            if ok {
-                return UIImage.init(named: path)
-            }
-        }
-        return nil
     }
     
     public var visibleImage:UIImage? {
@@ -145,7 +133,7 @@ open class KKImageElement: KKCanvasElement {
             if _image == nil {
                 let v = get(KKProperty.Src, defaultValue: "")
                 if v != "" {
-                    _image = KKImageElement.imageWithURI(v)
+                    _image = UIImage.image(uri: v)
                     if( _image == nil &&  _status == .None) {
                         _http?.cancel()
                         let options = KKHttpOptions.init(url: v)
@@ -166,7 +154,7 @@ open class KKImageElement: KKCanvasElement {
             if _defaultImage == nil {
                 let v = get(KKProperty.DefaultSrc, defaultValue: "")
                 if v != "" {
-                    _defaultImage = KKImageElement.imageWithURI(v)
+                    _defaultImage = UIImage.image(uri: v)
                 }
             }
             return _defaultImage
@@ -178,7 +166,7 @@ open class KKImageElement: KKCanvasElement {
             if _failImage == nil {
                 let v = get(KKProperty.FailSrc, defaultValue: "")
                 if v != "" {
-                    _failImage = KKImageElement.imageWithURI(v)
+                    _failImage = UIImage.image(uri: v)
                 }
             }
             return _failImage
@@ -195,6 +183,11 @@ open class KKImageElement: KKCanvasElement {
                 _http?.cancel()
                 _http = nil
                 _status = .None
+                _image = nil
+            } else if(property == KKProperty.DefaultSrc) {
+                _defaultImage = nil
+            } else if(property == KKProperty.FailSrc) {
+                _failImage = nil
             }
             
             let image = self.visibleImage
@@ -209,6 +202,7 @@ open class KKImageElement: KKCanvasElement {
         super.onPropertyChanged(property, value, newValue);
     }
     
+   
     internal override func onInit() ->Void {
         super.onInit()
         set(KKProperty.Layout,Layout.init())

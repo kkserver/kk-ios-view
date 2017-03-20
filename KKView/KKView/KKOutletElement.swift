@@ -37,6 +37,21 @@ open class KKOutletElement: KKScriptElement {
     
     private var _fn:KKScriptElementFunction?
     
+    public required init(element:KKElement) {
+        super.init(element:element)
+        if element is KKOutletElement {
+            _fn = (element as! KKOutletElement)._fn
+        }
+    }
+    
+    public required init(style: KKStyle) {
+        super.init(style: style)
+    }
+    
+    public required init() {
+        super.init()
+    }
+
     override internal func onRunScript(_ runnable:KKScriptElementRunnable) ->Void {
     
         let text = get(KKProperty.Text, defaultValue: "")

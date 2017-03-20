@@ -9,6 +9,13 @@
 import Foundation
 import KKObserver
 
+public protocol KKElementPropertyProtocol {
+    
+    func setElement(_ element:KKElement, property:KKProperty ,value:Any?, newValue:Any?) -> Void
+    
+}
+
+
 open class KKElementEvent : KKEvent {
     
     public var cancelBubble:Bool=false
@@ -282,9 +289,10 @@ open class KKElement : KKEventEmitter,NSCopying , Sequence {
         onInit()
     }
     
-    public required init(name:String) {
+    public required init(style:KKStyle) {
         super.init()
         onInit()
+        set(KKProperty.Style,style)
     }
     
     internal func onInit() ->Void {

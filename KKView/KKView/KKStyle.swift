@@ -45,7 +45,8 @@ open class KKStyle : NSObject{
         KKProperty.MinContentSize,
         KKProperty.ScrollbarX,KKProperty.ScrollbarY,
         KKProperty.Wrap,KKProperty.Truncation,
-        KKProperty.Clips,KKProperty.Target
+        KKProperty.Clips,KKProperty.Target,
+        KKProperty.MaskColor,KKProperty.View,KKProperty.Layer
     ];
     
     private var _propertys:Set<KKProperty> = Set.init();
@@ -94,10 +95,22 @@ open class KKStyle : NSObject{
     
     public func get(_ property:KKProperty,_ status:String) -> Any? {
         
-        let vs = _values[status];
+        var keys = [status]
         
-        if(vs != nil) {
-            return vs![property] ;
+        if status != "" {
+            keys.append("")
+        }
+        
+        for key in keys {
+            
+            let vs = _values[key];
+            
+            if(vs != nil) {
+                let v = vs![property] ;
+                if v != nil {
+                    return v
+                }
+            }
         }
         
         return nil;

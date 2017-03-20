@@ -24,24 +24,11 @@ public extension KKElement {
 }
 
 
-open class KKDocument: KKElement,KKViewElementProtocol,KKLayerElementProtocol,XMLParserDelegate {
+open class KKDocument: KKViewElement,XMLParserDelegate {
     
     private var _styleSheet:KKStyleSheet?
-    private weak var _view:UIView?
     private var _animations:Dictionary<String,KKAnimationElement>?
     public var bundle:Bundle?
-    
-    public var view:UIView {
-        get {
-            return _view!
-        }
-    }
-    
-    public var layer:CALayer {
-        get {
-            return _view!.layer
-        }
-    }
     
     public var styleSheet:KKStyleSheet? {
         get {
@@ -49,52 +36,16 @@ open class KKDocument: KKElement,KKViewElementProtocol,KKLayerElementProtocol,XM
         }
     }
     
-    public init(view:UIView) {
-        _view = view;
-        super.init()
-    }
-    
-    public required init() {
-        super.init()
-    }
-    
-    public required init(element: KKElement) {
-        _view = type(of: (element as! KKViewElementProtocol).view).init(frame: CGRect.zero);
-        super.init(element:element)
-    }
-    
-    public required init(name: String) {
-        
-        var clazz:AnyClass? = nil
-        
-        if(name.contains(":")) {
-            clazz = NSClassFromString(name.components(separatedBy: ":").last!)
-        }
-        
-        if(clazz == nil) {
-            _view = UIView.init(frame:CGRect.zero)
-        }
-        else {
-            _view = (clazz! as! UIView.Type).init(frame:CGRect.zero);
-        }
-        
-        super.init()
-    }
-    
     internal override func onInit() ->Void {
         super.onInit()
+        set(KKProperty.Layout,"relative");
         set(KKProperty.Width,"100%");
         set(KKProperty.Height,"100%");
-        set(KKProperty.Layout,"relative");
     }
     
     override internal func onPropertyChanged(_ property:KKProperty,_ value:Any?,_ newValue:Any?) {
-        if(_view != nil) {
-            _view!.KKElementSetProperty(self, property, value, newValue)
-        }
         super.onPropertyChanged(property, value, newValue)
     }
-
     
     public func loadXML(parser:XMLParser) ->Void {
         parser.delegate = self
@@ -177,7 +128,8 @@ open class KKDocument: KKElement,KKViewElementProtocol,KKLayerElementProtocol,XM
         if(_element == nil) {
             e = self
         } else {
-            e = styleSheet!.newElement(_element, elementName)
+            let v = attributeDict["class"];
+            e = styleSheet!.newElement(_element, elementName, v != nil ? v!: elementName)
         }
         
         let data = NSMutableDictionary.init()
@@ -185,7 +137,7 @@ open class KKDocument: KKElement,KKViewElementProtocol,KKLayerElementProtocol,XM
         for (key,value) in attributeDict {
             if key.hasPrefix("data-") {
                 data[key.substring(from: key.index(key.startIndex, offsetBy: 5))] = value
-            } else {
+            } else if(key != "class") {
                 KKStyle.set(element: e, key, value)
             }
         }

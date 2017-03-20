@@ -551,6 +551,8 @@ public class KKProperty : Hashable {
     
     public static let BackgroundColor:KKProperty = KKProperty.init(name: "background-color", function: KKProperty.ColorFunction, virtual: false);
     
+    public static let MaskColor:KKProperty = KKProperty.init(name: "mask-color", function: KKProperty.ColorFunction, virtual: false);
+    
     public static let BorderColor:KKProperty = KKProperty.init(name: "border-color", function: KKProperty.ColorFunction, virtual: false);
     
     public static let BorderWidth:KKProperty = KKProperty.init(name: "border-width", function: KKProperty.KKValueFunction, virtual: false);
@@ -638,6 +640,10 @@ public class KKProperty : Hashable {
     public static let ReuseKey:KKProperty = KKProperty.init(name: "reuse-key", function: KKProperty.StringFunction, virtual: false);
     
     public static let Class:KKProperty = KKProperty.init(name: "class", function: KKProperty.ClassFunction, virtual: false);
+    
+    public static let View:KKProperty = KKProperty.init(name: "view", function: KKProperty.ClassFunction, virtual: false);
+    
+    public static let Layer:KKProperty = KKProperty.init(name: "layer", function: KKProperty.ClassFunction, virtual: false);
     
     public static let Src:KKProperty = KKProperty.init(name: "src", function: KKProperty.StringFunction, virtual: false);
     
