@@ -9,7 +9,7 @@
 import UIKit
 import KKHttp
 
-open class KKImageElement: KKCanvasElement {
+open class KKImageElement: KKViewElement {
     
     open class Layout : KKLayout {
         
@@ -80,6 +80,10 @@ open class KKImageElement: KKCanvasElement {
         case Fail
     }
     
+    public override class func defaultView() -> UIView {
+        return UIImageView.init(frame: CGRect.zero)
+    }
+    
     private var _image:UIImage?
     private var _defaultImage:UIImage?
     private var _failImage:UIImage?
@@ -93,11 +97,10 @@ open class KKImageElement: KKCanvasElement {
             if image != nil {
                 e._status = .None
                 e._image = image as! UIImage?
-                e.layer.contents = e._image?.cgImage
             } else {
                 e._status = .Fail
-                e.layer.contents = e.visibleImage?.cgImage
             }
+            (e.view as! UIImageView).image = e.visibleImage
         }
     }
     
@@ -106,7 +109,7 @@ open class KKImageElement: KKCanvasElement {
             let e = (element as! KKImageElement?)!
             e._http = nil
             e._status = .Fail
-            e.layer.contents = e.visibleImage?.cgImage
+            (e.view as! UIImageView).image = e.visibleImage
         }
     }
     
@@ -192,11 +195,8 @@ open class KKImageElement: KKCanvasElement {
             
             let image = self.visibleImage
            
-            if image == nil {
-                self.layer.contents = nil
-            } else {
-                self.layer.contents = image?.cgImage
-            }
+            (self.view as! UIImageView).image = image
+            
         }
         
         super.onPropertyChanged(property, value, newValue);
@@ -205,6 +205,7 @@ open class KKImageElement: KKCanvasElement {
    
     internal override func onInit() ->Void {
         super.onInit()
+        self.view.isUserInteractionEnabled = false;
         set(KKProperty.Layout,Layout.init())
         set(KKProperty.Width,"auto")
         set(KKProperty.Height,"auto")

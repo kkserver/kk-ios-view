@@ -727,4 +727,6 @@ public class KKProperty : Hashable {
     
     public static let Data:KKProperty = KKProperty.init(name: "data", function: KKProperty.ObjectFunction, virtual: false);
     
+    public static let TextDecoration = KKProperty.init(name: "text-decoration", function: KKProperty.StringFunction, virtual: false);
+    
 }

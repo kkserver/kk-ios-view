@@ -228,6 +228,9 @@ open class KKViewElement: KKElement,KKViewElementProtocol , KKLayerElementProtoc
                 scrollView.showsVerticalScrollIndicator = newValue as! Bool
             } else if(property == KKProperty.ScrollbarX) {
                 scrollView.showsHorizontalScrollIndicator = newValue as! Bool
+            } else if(property == KKProperty.ContentInest) {
+                let v = newValue as! KKEdge
+                scrollView.contentInset = UIEdgeInsetsMake(v.top.floatValue(0), v.left.floatValue(0), v.bottom.floatValue(0), v.right.floatValue(0))
             }
         }
         

@@ -46,7 +46,9 @@ open class KKStyle : NSObject{
         KKProperty.ScrollbarX,KKProperty.ScrollbarY,
         KKProperty.Wrap,KKProperty.Truncation,
         KKProperty.Clips,KKProperty.Target,
-        KKProperty.MaskColor,KKProperty.View,KKProperty.Layer
+        KKProperty.MaskColor,KKProperty.View,KKProperty.Layer,
+        KKProperty.TextDecoration,KKProperty.LineSpacing,
+        KKProperty.ContentInest
     ];
     
     private var _propertys:Set<KKProperty> = Set.init();

@@ -8,7 +8,7 @@
 
 import Foundation
 
-open class KKTextElement :KKCanvasElement {
+open class KKTextElement :KKViewElement {
  
     open class Layout : KKLayout {
         
@@ -147,6 +147,12 @@ open class KKTextElement :KKCanvasElement {
             }
         }
         
+        internal override func onInit() ->Void {
+            super.onInit()
+            set(KKProperty.Width,"auto")
+            set(KKProperty.Height,"auto")
+        }
+        
         public var bounds:CGRect {
             
             get {
@@ -166,13 +172,13 @@ open class KKTextElement :KKCanvasElement {
                     
                     let min = get(KKProperty.MinWidth, defaultValue:KKValue.Zero)
                     
-                    if r.size.width < min.floatValue(0) {
+                    if !min.isZero() && r.size.width < min.floatValue(0) {
                         r.size.width = min.floatValue(0)
                     }
                     
                     let max = get(KKProperty.MaxWidth, defaultValue:KKValue.Zero)
                     
-                    if r.size.width > max.floatValue(0) {
+                    if !max.isZero() && r.size.width > max.floatValue(0) {
                         r.size.width = max.floatValue(0)
                     }
                     
@@ -190,13 +196,13 @@ open class KKTextElement :KKCanvasElement {
                     
                     let min = get(KKProperty.MinHeight, defaultValue:KKValue.Zero)
                     
-                    if r.size.height < min.floatValue(0) {
+                    if !min.isZero() && r.size.height < min.floatValue(0) {
                         r.size.height = min.floatValue(0)
                     }
                     
                     let max = get(KKProperty.MinHeight, defaultValue:KKValue.Zero)
                     
-                    if r.size.height > max.floatValue(0) {
+                    if !max.isZero() && r.size.height > max.floatValue(0) {
                         r.size.height = max.floatValue(0)
                     }
                     
@@ -211,24 +217,29 @@ open class KKTextElement :KKCanvasElement {
                 r.size.height += margin.top.floatValue(0) + margin.bottom.floatValue(0)
                 
                 r.origin.x = padding.left.floatValue(0)
-                r.origin.y = padding.top.floatValue(0)
+                r.origin.y = -padding.top.floatValue(0)
                 
                 return r
             }
         }
     }
     
-    public override class func defaultLayer() -> CALayer {
-        return CATextLayer.init()
+    public override class func defaultView() -> UIView {
+        return UILabel.init(frame: CGRect.zero)
     }
     
     public func attributes(element:KKElement) -> Dictionary<String,Any> {
         
         var attrs = Dictionary<String,Any>.init()
-        
        
         attrs[NSForegroundColorAttributeName] = get(KKProperty.Color, defaultValue: UIColor.black)
         attrs[NSFontAttributeName] = get(KKProperty.Font, defaultValue: UIFont.systemFont(ofSize: 14 * KKValue.UnitDP))
+        
+        let v = get(KKProperty.TextDecoration ,defaultValue:"")
+        
+        if v == "line-through" {
+            attrs[NSStrikethroughStyleAttributeName] = 1
+        }
         
         let style = NSMutableParagraphStyle.init()
         
@@ -249,6 +260,13 @@ open class KKTextElement :KKCanvasElement {
                     style.lineSpacing = (value as! KKValue).floatValue(0)
                 } else if(key == KKProperty.ParagraphSpacing) {
                     style.paragraphSpacing = (value as! KKValue).floatValue(0)
+                } else if(key == KKProperty.TextDecoration) {
+                    
+                    let v = value as! String
+                    
+                    if v == "line-through" {
+                        attrs[NSStrikethroughStyleAttributeName] = 1
+                    }
                 }
             }
         
@@ -316,7 +334,7 @@ open class KKTextElement :KKCanvasElement {
     override internal func onPropertyChanged(_ property:KKProperty,_ value:Any?,_ newValue:Any?) {
         super.onPropertyChanged(property, value, newValue);
         
-        let layer = (self.layer as! CATextLayer)
+        let label = (self.view as! UILabel)
         
         if(property == KKProperty.Text) {
             setNeedsDisplay()
@@ -324,29 +342,8 @@ open class KKTextElement :KKCanvasElement {
             setNeedsDisplay()
         } else if(property == KKProperty.Color) {
             setNeedsDisplay()
-        } else if(property == KKProperty.Wrap) {
-            layer.isWrapped = newValue as! Bool
-        } else if(property == KKProperty.Truncation) {
-            layer.truncationMode = newValue as! String
-        } else if(property == KKProperty.TextAlign) {
-            let v = newValue as! NSTextAlignment
-            switch v {
-            case .center:
-                layer.alignmentMode = "center"
-                break
-            case .left:
-                layer.alignmentMode = "left"
-                break
-            case .right:
-                layer.alignmentMode = "right"
-                break
-            case .justified:
-                layer.alignmentMode = "justified"
-                break
-            case .natural:
-                layer.alignmentMode = "natural"
-                break;
-            }
+        }  else if(property == KKProperty.TextAlign) {
+            label.textAlignment = newValue == nil ? NSTextAlignment.left :newValue as! NSTextAlignment
         }
         
     }
@@ -358,14 +355,14 @@ open class KKTextElement :KKCanvasElement {
             return
         }
         _displaying = true
-        let e = self.layer as! CATextLayer
+        let e = self.view as! UILabel
         let v = self
         
         DispatchQueue.main.async {
             v._string = nil
             v._size = CGSize.zero
             v._bounds = CGRect.zero
-            e.string = v.string
+            e.attributedText = v.string
             v._displaying = false
         }
         
@@ -373,6 +370,8 @@ open class KKTextElement :KKCanvasElement {
     
     internal override func onInit() ->Void {
         super.onInit()
+        self.view.isUserInteractionEnabled = false
+        (self.view as! UILabel).numberOfLines = 0
         set(KKProperty.Layout,Layout.init())
         set(KKProperty.Width,"auto")
         set(KKProperty.Height,"auto")
