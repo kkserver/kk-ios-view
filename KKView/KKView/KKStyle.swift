@@ -48,7 +48,8 @@ open class KKStyle : NSObject{
         KKProperty.Clips,KKProperty.Target,
         KKProperty.MaskColor,KKProperty.View,KKProperty.Layer,
         KKProperty.TextDecoration,KKProperty.LineSpacing,
-        KKProperty.ContentInest
+        KKProperty.ContentInest,
+        KKProperty.Id
     ];
     
     private var _propertys:Set<KKProperty> = Set.init();

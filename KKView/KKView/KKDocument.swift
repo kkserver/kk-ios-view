@@ -26,6 +26,7 @@ public extension KKElement {
 
 open class KKDocument: KKViewElement,XMLParserDelegate {
     
+    private var _elements:Dictionary<String,KKElement>?
     private var _styleSheet:KKStyleSheet?
     private var _animations:Dictionary<String,KKAnimationElement>?
     public var bundle:Bundle?
@@ -45,6 +46,13 @@ open class KKDocument: KKViewElement,XMLParserDelegate {
     
     override internal func onPropertyChanged(_ property:KKProperty,_ value:Any?,_ newValue:Any?) {
         super.onPropertyChanged(property, value, newValue)
+    }
+    
+    public func element(id:String) ->KKElement? {
+        if _elements != nil {
+            return _elements![id]
+        }
+        return nil
     }
     
     public func loadXML(parser:XMLParser) ->Void {
@@ -110,8 +118,9 @@ open class KKDocument: KKViewElement,XMLParserDelegate {
         removeAllChildren()
         _element = nil
         _text = nil
-        _animations = Dictionary.init()
-        _styleSheet = KKStyleSheet.init();
+        _animations = Dictionary<String,KKAnimationElement>.init()
+        _styleSheet = KKStyleSheet.init()
+        _elements = Dictionary<String,KKElement>.init()
         onStartDocument()
     }
     
@@ -150,6 +159,12 @@ open class KKDocument: KKViewElement,XMLParserDelegate {
         
         _element = e
         _text = nil
+        
+        let v = e.get(KKProperty.Id, defaultValue: "")
+        
+        if v != "" {
+            _elements![v] = e
+        }
         
         onStartElement(_element!,elementName)
         
