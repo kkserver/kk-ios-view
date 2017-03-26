@@ -201,6 +201,16 @@ open class KKViewElement: KKElement,KKViewElementProtocol , KKLayerElementProtoc
                 mask.backgroundColor = (newValue as! UIColor).cgColor
                 view.layer.mask = mask
             }
+        } else if(property == KKProperty.Enabled) {
+            if view is UIControl {
+                (view as! UIControl).isEnabled = newValue == nil ? true : newValue as! Bool
+            } else {
+                view.isUserInteractionEnabled = newValue == nil ? true : newValue as! Bool
+            }
+        } else if(property == KKProperty.Selected) {
+            if view is UIControl {
+                (view as! UIControl).isSelected = newValue == nil ? false : newValue as! Bool
+            }
         }
         
         if view is UIScrollView {

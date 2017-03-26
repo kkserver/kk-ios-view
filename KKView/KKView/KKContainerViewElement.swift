@@ -63,6 +63,16 @@ open class KKContainerViewElement: KKViewElement ,UIScrollViewDelegate{
     }
     
     public class ItemElement: KKViewElement {
+        
+        override public func onAddToParent(_ element:KKElement) {
+            
+            if(element is KKViewElementProtocol) {
+                let pview = (element as! KKViewElementProtocol).view
+                pview.insertSubview(self.view, at: 0)
+            }
+            
+            super.onAddToParent(element)
+        }
     }
     
     public class CellElement: KKElement {
