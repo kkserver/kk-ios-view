@@ -132,7 +132,7 @@ open class KKViewElement: KKElement,KKViewElementProtocol , KKLayerElementProtoc
             
         }
         else if(property == KKProperty.Hidden) {
-            view.isHidden = newValue as! Bool;
+            view.isHidden = newValue == nil ? false : newValue as! Bool;
         }
         else if(property == KKProperty.Gravity) {
             let v = newValue as! String?
@@ -224,7 +224,8 @@ open class KKViewElement: KKElement,KKViewElementProtocol , KKLayerElementProtoc
                 let frame = e.get(KKProperty.Frame, defaultValue: CGRect.zero)
                 var contentSize = e.get(KKProperty.ContentSize, defaultValue: CGSize.zero)
                 let minSize = e.get(KKProperty.MinContentSize, defaultValue: KKSize.Zero)
-                let size = CGSize.init(width: minSize.width.floatValue(frame.size.width), height: minSize.height.floatValue(frame.size.height))
+                let inset = scrollView.contentInset
+                let size = CGSize.init(width: minSize.width.floatValue(frame.size.width - inset.left - inset.right), height: minSize.height.floatValue(frame.size.height - inset.top - inset.bottom))
                 if contentSize.width < size.width {
                     contentSize.width = size.width
                 }
