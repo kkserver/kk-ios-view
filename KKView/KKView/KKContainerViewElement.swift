@@ -329,6 +329,9 @@ open class KKContainerViewElement: KKViewElement ,UIScrollViewDelegate{
             else if(p is CellElement) {
                 
             }
+            else if(p is ItemElement) {
+                
+            }
             else {
                 p!.set(KKProperty.Observer,observer);
             }
