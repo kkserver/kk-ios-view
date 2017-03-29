@@ -88,7 +88,7 @@ open class KKContainerViewElement: KKViewElement ,UIScrollViewDelegate{
             var p = firstChild;
             
             while(p != nil) {
-                if( p is ReflectElementProtocol) {
+                if( p is KKReflectElementProtocol) {
                     
                 }
                 else {
@@ -320,6 +320,20 @@ open class KKContainerViewElement: KKViewElement ,UIScrollViewDelegate{
             }, self)
         }
         
+        var p:KKElement? = firstChild;
+        
+        while(p != nil) {
+            if(p is KKReflectElementProtocol) {
+                
+            }
+            else if(p is CellElement) {
+                
+            }
+            else {
+                p!.set(KKProperty.Observer,observer);
+            }
+            p = p!.nextSibling;
+        }
     }
     
     override public func newChildrenElement(_ name:String) -> KKElement? {

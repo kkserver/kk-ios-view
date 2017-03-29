@@ -9,7 +9,7 @@
 import Foundation
 
 
-public protocol ReflectElementProtocol {
+public protocol KKReflectElementProtocol {
     
 }
 

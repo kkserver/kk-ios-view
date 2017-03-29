@@ -330,7 +330,7 @@ open class KKElement : KKEventEmitter,NSCopying , Sequence {
         var p = firstChild;
         
         while(p != nil) {
-            if( p is ReflectElementProtocol) {
+            if( p is KKReflectElementProtocol) {
                 
             }
             else {
@@ -508,7 +508,7 @@ open class KKElement : KKEventEmitter,NSCopying , Sequence {
         var p:KKElement? = firstChild;
         
         while(p != nil) {
-            if(p is ReflectElementProtocol) {
+            if(p is KKReflectElementProtocol) {
                 
             }
             else {
