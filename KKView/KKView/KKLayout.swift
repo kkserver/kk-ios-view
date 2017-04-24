@@ -145,21 +145,22 @@ open class KKLayout {
             var size:CGSize = CGSize.zero
             let padding = element.get(KKProperty.Padding, defaultValue: KKEdge.Zero)
             var frame = element.get(KKProperty.Frame, defaultValue: CGRect.zero)
-            let paddingLeft = padding.left.floatValue(frame.size.width)
-            let paddingTop = padding.top.floatValue(frame.size.height)
-            let paddingRight = padding.right.floatValue(frame.size.width)
-            let paddingBottom = padding.bottom.floatValue(frame.size.height)
             let width = element.get(KKProperty.Width, defaultValue: KKValue.Zero)
-            let height = element.get(KKProperty.Width, defaultValue: KKValue.Zero)
+            let height = element.get(KKProperty.Height, defaultValue: KKValue.Zero)
             
             if(width.isAuto()) {
                 frame.size.width = CGFloat.init(Int32.max)
             }
             
             if(height.isAuto()) {
-                frame.size.height = CGFloat.init(Int32.min)
+                frame.size.height = CGFloat.init(Int32.max)
             }
             
+            let paddingLeft = padding.left.floatValue(frame.size.width)
+            let paddingTop = padding.top.floatValue(frame.size.height)
+            let paddingRight = padding.right.floatValue(frame.size.width)
+            let paddingBottom = padding.bottom.floatValue(frame.size.height)
+
             let inSize = CGSize.init(width: frame.size.width - paddingLeft - paddingRight, height: frame.size.height - paddingTop - paddingBottom)
             
             size.width = paddingLeft + paddingRight

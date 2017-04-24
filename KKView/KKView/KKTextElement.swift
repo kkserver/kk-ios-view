@@ -23,11 +23,11 @@ open class KKTextElement :KKViewElement {
                 let e = element as! KKTextElement
                 
                 if width.isAuto() {
-                    frame.size.width = CGFloat.greatestFiniteMagnitude
+                    frame.size.width = CGFloat.init(Int32.max)
                 }
                 
                 if height.isAuto() {
-                    frame.size.height = CGFloat.greatestFiniteMagnitude
+                    frame.size.height = CGFloat.init(Int32.max)
                 }
                 
                 let bounds = e.bounds(size: frame.size)

@@ -108,10 +108,6 @@ open class KKContainerViewElement: KKViewElement ,UIScrollViewDelegate{
                 
                 if(v != nil && item != nil) {
                     item!.frame = v!
-                    if item!.element != nil {
-                        item!.element!.set(KKProperty.Frame, v!)
-                        item!.element!.layoutChildren()
-                    }
                 }
                 
             }
@@ -151,6 +147,10 @@ open class KKContainerViewElement: KKViewElement ,UIScrollViewDelegate{
                 
                 if cell == nil {
                     continue
+                }
+                
+                if item.element != nil {
+                    return item.element!
                 }
                 
                 cell!.item = item
@@ -199,7 +199,11 @@ open class KKContainerViewElement: KKViewElement ,UIScrollViewDelegate{
         return ItemIterator.init(container: container)
     }
     
+    private var _reloading:Bool = false
+    
     public func reloadData() {
+        
+        _reloading = true
         
         var p = firstChild
         var n:KKElement?
@@ -241,6 +245,7 @@ open class KKContainerViewElement: KKViewElement ,UIScrollViewDelegate{
         layoutChildren()
         reloadElements()
         
+        _reloading = false
     }
     
     internal func isVisibleRect(frame:CGRect) -> Bool {
@@ -283,7 +288,7 @@ open class KKContainerViewElement: KKViewElement ,UIScrollViewDelegate{
     
     open override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey : Any]?, context: UnsafeMutableRawPointer?) {
        
-        if(keyPath == "contentOffset") {
+        if(_reloading == false && keyPath == "contentOffset") {
             reloadElements()
         }
         
@@ -293,7 +298,9 @@ open class KKContainerViewElement: KKViewElement ,UIScrollViewDelegate{
         super.onPropertyChanged(property, value, newValue);
         
         if(property == KKProperty.ContentSize) {
-            self.reloadElements()
+            if _reloading == false {
+                self.reloadElements()
+            }
         } else if(property == KKProperty.Frame) {
             let r = newValue as! CGRect
             container.size = r.size
